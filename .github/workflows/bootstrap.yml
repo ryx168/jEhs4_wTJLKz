@@ -1,0 +1,115 @@
+name: bootstrap
+# Installs the Tesseract CLI on a GitHub runner, dumps its help/schema and
+# vendors the Tesseract skills into this repo so the scene can be authored
+# against real docs. Commits the dumps back. No secrets needed.
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - ".github/workflows/bootstrap.yml"
+permissions:
+  contents: write
+concurrency:
+  group: bootstrap
+  cancel-in-progress: true
+jobs:
+  bootstrap:
+    runs-on: ubuntu-24.04
+    env:
+      TSRCT_VERSION: "0.6.0"
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: System deps (software Vulkan driver, ffmpeg)
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq unzip python3 ffmpeg libvulkan1 mesa-vulkan-drivers vulkan-tools zlib1g fonts-noto-cjk time
+          sudo apt-get install -y -qq libasound2t64 || sudo apt-get install -y -qq libasound2
+          echo "::group::vulkaninfo"; vulkaninfo --summary 2>&1 | head -60 || true; echo "::endgroup::"
+          ffmpeg -hide_banner -encoders 2>/dev/null | grep -E "libx264|aac" || true
+
+      - name: Download + verify Tesseract CLI
+        run: |
+          base="https://github.com/mirage-hq/tesseract/releases/download/v${TSRCT_VERSION}"
+          z="tesseract-${TSRCT_VERSION}-linux-x86_64.zip"
+          curl -fsSL -o "$z" "$base/$z"
+          curl -fsSL -o "$z.sha256" "$base/$z.sha256"
+          sha256sum -c "$z.sha256"
+          unzip -q "$z" -d tsrct-cli
+          echo "::group::bundle listing"; find tsrct-cli -maxdepth 3 | head -80; echo "::endgroup::"
+
+      - name: Install
+        run: |
+          d=$(find tsrct-cli -name install.sh -printf '%h\n' | head -1)
+          echo "install.sh in: $d"
+          bash "$d/install.sh"
+          TS="${XDG_DATA_HOME:-$HOME/.local/share}/Tesseract/bin/tsrct"
+          ls -la "$(dirname "$TS")"
+          echo "TS=$TS" >> "$GITHUB_ENV"
+          "$TS" --version
+
+      - name: Dump CLI docs
+        run: |
+          mkdir -p docs/cli docs/bundle
+          "$TS" --help > docs/cli/help.txt 2>&1 || true
+          "$TS" help > docs/cli/help2.txt 2>&1 || true
+          cat docs/cli/help.txt
+          # every subcommand named in the top-level help
+          for sub in $(grep -oE '^\s{2,}[a-z][a-z0-9-]+' docs/cli/help.txt | awk '{print $1}' | sort -u); do
+            "$TS" "$sub" --help > "docs/cli/$sub.txt" 2>&1 || true
+            # one level deeper
+            for sub2 in $(grep -oE '^\s{2,}[a-z][a-z0-9-]+' "docs/cli/$sub.txt" | awk '{print $1}' | sort -u); do
+              "$TS" "$sub" "$sub2" --help > "docs/cli/$sub.$sub2.txt" 2>&1 || true
+            done
+          done
+          "$TS" project schema > docs/cli/project-schema.json 2>&1 || true
+          # every text/doc/example file shipped inside the CLI bundle (no binaries)
+          (cd tsrct-cli && find . -type f \( -name '*.md' -o -name '*.txt' -o -name '*.json' -o -name '*.tsrct' -o -name '*.yaml' -o -name '*.yml' -o -name '*.html' \) -size -2M -exec cp --parents {} ../docs/bundle/ \;)
+          du -sh docs/cli docs/bundle; ls docs/cli
+
+      - name: Smoke test (3D support, path tracer on lavapipe, timing, H.264 export)
+        run: |
+          set +e
+          mkdir -p smoke docs/smoke
+          echo "createFxScene3DLayer in schema: $(grep -c createFxScene3DLayer docs/cli/project-schema.json)" | tee docs/smoke/log.txt
+          fc-list | grep -i "cjk" | head -5 | tee -a docs/smoke/log.txt
+          cat > smoke/scene.json <<'EOF'
+          [
+            {"type":"createFxScene3DLayer","compositionId":"main","layerId":1,"name":"Smoke scene","pixelsPerMeter":100,"view":{"id":9,"exposure":0},"activeRange":{"start":0,"duration":3000},"transform":{"anchorPoint":[0,0],"position":[0,0],"scale":[100,100],"rotation":0,"opacity":100},"world":{"id":2},"renderSettings":{"id":97,"filmGate":null,"overscan":null,"lightGroups":[],"lightCollections":[],"lightLinks":[],"outputs":[],"previewOutput":null}},
+            {"type":"addFxScene3DLayer","compositionId":"main","layerId":1,"item":{"type":"Camera3D","id":3,"parentId":null,"name":"Front camera","transform":{"position":[540,960,-1200],"relationships":{"constraints":[{"type":"aim","id":80,"target":{"id":800,"target":{"type":"world"},"offset":[540,960,0],"offsetSpace":"local"},"upSpace":"local","forwardAxis":"positiveZ"}]}},"lens":{"type":"angle","projection":{"type":"orthographic","scale":640}}}},
+            {"type":"setFxScene3DActiveCamera","compositionId":"main","layerId":1,"cameraItemId":3},
+            {"type":"addFxScene3DLayer","compositionId":"main","layerId":1,"item":{"type":"Light3D","id":4,"parentId":null,"name":"Key light","emitter":{"type":"parallel","irradiance":3}}},
+            {"type":"addFxScene3DFragment","compositionId":"main","layerId":1,"data":[{"type":"mesh","id":100,"name":"Box geometry","geometry":{"type":"box","size":[180,180,180]},"regions":[{"key":"primary","name":"Primary"},{"key":"side","name":"Side"}]}],"items":[{"type":"Mesh3D","id":5,"parentId":null,"name":"Box","dataId":100,"packing":"whole","transform":{"position":[540,960,0]},"materialSlots":[{"id":101,"name":"Blue","binding":{"id":6,"inputs":{"baseColor":{"type":"constant","value":[0.010022825574869039,0.21404114048223255,0.7874122893956174]},"roughness":{"type":"constant","value":0.4}}}}],"regionSlots":[{"region":"primary","slotId":101},{"region":"side","slotId":101}]}]},
+            {"type":"setFxPropertyValue","compositionId":"main","target":{"type":"styleProperty","layerId":1,"itemId":5,"propertyName":"rotationX"},"value":{"type":"float","value":-20}},
+            {"type":"setFxAnimator","compositionId":"main","target":{"type":"styleProperty","layerId":1,"itemId":5,"propertyName":"rotationY"},"animator":{"type":"keyframes","enabled":true,"keyframes":[{"id":"box-start","layerTime":0,"value":{"type":"float","value":-25},"easing":{"type":"linear"}},{"id":"box-end","layerTime":2500,"value":{"type":"float","value":65},"easing":{"type":"linear"}}]},"dependencies":[],"layerRefBindings":[]}
+          ]
+          EOF
+          cd smoke
+          run() { echo; echo "\$ $*" | tee -a ../docs/smoke/log.txt; /usr/bin/time -f "  wall %es  maxrss %MKB" "$@" 2>&1 | tail -15 | tee -a ../docs/smoke/log.txt; }
+          run "$TS" project create --project scene.tsrct
+          run "$TS" project apply --project scene.tsrct --actions scene.json
+          run "$TS" preview --project scene.tsrct --time 1 --output ../docs/smoke/raster.png
+          run "$TS" preview --project scene.tsrct --time 1 --output ../docs/smoke/pt16.png --renderer path-tracer --samples 16
+          run "$TS" preview --project scene.tsrct --time 1 --output ../docs/smoke/pt64.png --renderer path-tracer --samples 64
+          run "$TS" export --project scene.tsrct --start-ms 0 --duration-ms 1000 --output ../docs/smoke/raster.mp4 --encoder-backend external-ffmpeg-command --ffmpeg-path "$(which ffmpeg)"
+          run "$TS" export --project scene.tsrct --start-ms 0 --duration-ms 500 --resolution 720p --output ../docs/smoke/pt.mp4 --renderer path-tracer --samples 16 --encoder-backend external-ffmpeg-command --ffmpeg-path "$(which ffmpeg)"
+          run "$TS" evaluate --list
+          cd ..
+          ls -la docs/smoke
+          true
+
+      - name: Vendor the Tesseract skills
+        run: |
+          git clone --depth 1 https://github.com/mirage-hq/Tesseract /tmp/tesseract-src
+          rm -rf skills && cp -r /tmp/tesseract-src/skills skills
+          cp /tmp/tesseract-src/README.md docs/UPSTREAM_README.md
+          cp /tmp/tesseract-src/LICENSE docs/UPSTREAM_LICENSE 2>/dev/null || true
+          find skills -type f | wc -l
+
+      - name: Commit back
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs skills
+          git commit -m "bootstrap: Tesseract ${TSRCT_VERSION} CLI docs + vendored skills [skip ci]" || echo "nothing to commit"
+          git push
