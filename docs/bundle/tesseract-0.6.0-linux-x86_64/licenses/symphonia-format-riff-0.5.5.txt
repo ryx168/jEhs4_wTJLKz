@@ -1,0 +1,7 @@
+symphonia-format-riff-0.5.5
+License selected: MPL-2.0
+Authors: Philip Deljanov <philip.deljanov@gmail.com>, dedobbin <dedobbindedobbin@gmail.com>
+Repository: https://github.com/pdeljanov/Symphonia
+Full standard license texts: licenses/license-texts/
+Corresponding source and original file notices: sources/cargo-dependencies.tar.gz
+

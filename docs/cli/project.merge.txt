@@ -1,0 +1,30 @@
+Combine standalone documents into a new document; inputs are left unchanged
+
+Scene3D layers stay separate. Canvas, frame-rate, colour and composition-wide render/audio settings must match; no conversion is performed. Identical packaged assets/fonts are shared. Different fonts with the same family/style selection fail with both source paths and asset IDs; rename the font in one source first. Variable name collisions keep links editable: identical definitions share the name; otherwise a free _2, _3, ... suffix is used. JSON reports per-source idMap, assetMap and variableMap, plus warnings.
+
+Usage: tsrct project merge [OPTIONS] --project <PROJECT> --from <SOURCES> --mode <MODE> --output <OUTPUT>
+
+Options:
+  -p, --project <PROJECT>
+          
+
+      --from <SOURCES>
+          Source document, repeated in append order. All source roots and dependencies are copied
+
+      --mode <MODE>
+          [possible values: append, overlay]
+
+      --at <AT>
+          Overlay start in seconds (millisecond timeline precision); required for overlay, forbidden for append
+
+  -o, --output <OUTPUT>
+          Output must not alias any input. Asset IDs and colliding variables are remapped independently per source
+
+      --dry-run
+          Validate and report maps without writing any files, including temporary archives
+
+      --pretty
+          
+
+  -h, --help
+          Print help (see a summary with '-h')

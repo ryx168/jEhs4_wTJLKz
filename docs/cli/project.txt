@@ -1,0 +1,22 @@
+Create, inspect, and edit a local FX document
+
+Usage: tsrct project <COMMAND>
+
+Commands:
+  check          Validate IDs, references and packaged assets without writing anything. Prints {valid, diagnostics, warnings}; invalid documents exit with status 1
+  create         
+  inspect        Print the stored editable document JSON
+  apply          Apply a JSON action batch atomically to an editable document
+  import-video   Package local MP4/MOV footage; use the returned asset ID in an FX video layer
+  import-asset   Package local audio, an image, a .cube LUT, or a Scene3D model, IES profile or point cache; use the returned asset ID in editable layers or effects
+  import-font    Package a local TTF/OTF/TTC file
+  inspect-fonts  Inspect every font embedded in a reopened document
+  checkout       Write the authoritative editable document JSON to a local file
+  commit         Validate and save edited document JSON, including packaged asset references
+  merge          Combine standalone documents into a new document; inputs are left unchanged
+  prune          Copy a compact package without assets unused by any frame; the source file is left unchanged. Scripts and unknown fields conservatively retain assets, with reasons in the JSON report
+  schema         
+  help           Print this message or the help of the given subcommand(s)
+
+Options:
+  -h, --help  Print help

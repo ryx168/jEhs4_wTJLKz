@@ -1,0 +1,7 @@
+cubek-convolution-0.2.0
+License selected: MIT
+Authors: Genna Wingert, louisfd <louisfd94@gmail.com>
+Repository: https://github.com/tracel-ai/cubek/tree/main/crates/cubek-convolution
+Full standard license texts: licenses/license-texts/
+Corresponding source and original file notices: sources/cargo-dependencies.tar.gz
+

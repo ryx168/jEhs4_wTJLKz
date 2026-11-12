@@ -1,0 +1,21 @@
+Apply a JSON action batch atomically to an editable document
+
+Scene3D camera controls accept depthOfField.focusAim: {constraintId, distanceOffset} to focus on that camera's Aim target. It excludes focusTarget and retains manual focusDistance when the Aim cannot supply a usable target.
+
+Usage: tsrct project apply [OPTIONS] --project <PROJECT> --actions <ACTIONS>
+
+Options:
+  -p, --project <PROJECT>
+          
+
+      --actions <ACTIONS>
+          JSON array of entries accepted by `project schema`; relative file paths inside entries resolve from the current directory
+
+  -o, --output <OUTPUT>
+          
+
+      --dry-run
+          Run the whole transaction, validation and preparations included, and report it without writing any file; adds what each editFxScene3DMesh moves (`meshEdits`)
+
+  -h, --help
+          Print help (see a summary with '-h')

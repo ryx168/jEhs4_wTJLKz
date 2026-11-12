@@ -1,0 +1,7 @@
+faer-traits-0.24.0
+License selected: MIT
+Authors: sarah quiñones <sarah@veganb.tw>
+Repository: https://codeberg.org/sarah-quinones/faer
+Full standard license texts: licenses/license-texts/
+Corresponding source and original file notices: sources/cargo-dependencies.tar.gz
+

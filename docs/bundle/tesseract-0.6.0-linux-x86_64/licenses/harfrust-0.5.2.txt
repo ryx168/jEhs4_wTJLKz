@@ -1,0 +1,7 @@
+harfrust-0.5.2
+License selected: MIT
+Authors: 
+Repository: https://github.com/harfbuzz/harfrust
+Full standard license texts: licenses/license-texts/
+Corresponding source and original file notices: sources/cargo-dependencies.tar.gz
+

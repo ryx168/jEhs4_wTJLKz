@@ -1,0 +1,55 @@
+Export an MP4 or ProRes 4444 MOV; use --fx-solo for a transparent overlay
+
+Usage: tsrct export [OPTIONS] --project <PROJECT> --output <OUTPUT>
+
+Options:
+      --json
+          Emit NDJSON progress on stderr and the result on stdout
+  -p, --project <PROJECT>
+          
+  -o, --output <OUTPUT>
+          
+      --format <FORMAT>
+          MP4 for sharing; ProRes 4444 MOV for editing or transparent overlays [default: mp4] [possible values: mp4, prores]
+      --resolution <RESOLUTION>
+          Output short side: 720p=720, 1080p=1080, 4k=2160 pixels. Upscales smaller canvases; proportional long side rounds to nearest even pixel (ties up) [default: 1080p] [possible values: 720p, 1080p, 4k]
+      --fps <FPS>
+          Output frames per second as a positive integer [default: 30]
+      --start-ms <START_MS>
+          Start of the export range in milliseconds (defaults to 0; relative to the solo window with --fx-solo)
+      --duration-ms <DURATION_MS>
+          Length of the export range in milliseconds (defaults to the remaining duration)
+      --start-frame <START_FRAME>
+          First source frame at N/fps seconds (relative to the solo window with --fx-solo)
+      --frame-count <FRAME_COUNT>
+          Exact output frame count; defaults to all frames remaining after --start-frame
+      --hdr [<HDR>]
+          Encode HEVC Main 10 MP4. Bare --hdr follows videos (HLG if none); pq preserves brighter highlights [possible values: auto, pq, hlg]
+      --renderer <RENDERER>
+          Scene3D renderer: raster (fast) or path-tracer (slow, physically based light; far slower without a hardware GPU) [default: raster] [possible values: raster, path-tracer]
+      --samples <SAMPLES>
+          Camera samples per pixel: raster export film/lens samples (default 64) or path-tracer samples (default 128); fewer render faster, noisier drafts
+      --max-bounces <MAX_BOUNCES>
+          Path-tracer bounces after the first hit, of every type together (default 12)
+      --diffuse-bounces <DIFFUSE_BOUNCES>
+          Path-tracer diffuse bounces (default 4)
+      --specular-bounces <SPECULAR_BOUNCES>
+          Path-tracer glossy reflection bounces (default 4)
+      --transmission-bounces <TRANSMISSION_BOUNCES>
+          Path-tracer bounces through glass and other transmissive surfaces (default 12)
+      --volume-bounces <VOLUME_BOUNCES>
+          Path-tracer scattering events in a medium (default 0, single scattering)
+      --indirect-clamp <INDIRECT_CLAMP>
+          Path-tracer largest summed RGB contribution of a sample after the first bounce (default 10; 0 is off)
+      --indirect-specular-blur <INDIRECT_SPECULAR_BLUR>
+          Path-tracer widening of glossy lobes after diffuse or rough bounces (default 1; 0 is off)
+      --no-denoise
+          Path trace without the denoiser
+      --encoder-backend <ENCODER_BACKEND>
+          Encoder implementation used for normal and isolated-FX exports [default: in-process-ffmpeg] [possible values: in-process-ffmpeg, external-ffmpeg-command]
+      --ffmpeg-path <FFMPEG_PATH>
+          Exact FFmpeg executable to invoke with the external command backend
+      --fx-solo <FX_SOLO>
+          Export only this composition_id:layer_id over its active window, without audio
+  -h, --help
+          Print help

@@ -1,0 +1,10 @@
+Copy a compact package without assets unused by any frame; the source file is left unchanged. Scripts and unknown fields conservatively retain assets, with reasons in the JSON report
+
+Usage: tsrct project prune [OPTIONS] --project <PROJECT>
+
+Options:
+  -p, --project <PROJECT>  
+  -o, --output <OUTPUT>    Destination .tsrct file; must not alias the input. Required unless --dry-run
+      --dry-run            Report removals and exact compacted size without writing any files
+      --pretty             
+  -h, --help               Print help

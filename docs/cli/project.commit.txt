@@ -1,0 +1,9 @@
+Validate and save edited document JSON, including packaged asset references
+
+Usage: tsrct project commit [OPTIONS] --project <PROJECT> --file <FILE>
+
+Options:
+  -p, --project <PROJECT>  
+      --file <FILE>        
+  -o, --output <OUTPUT>    
+  -h, --help               Print help

@@ -1,0 +1,7 @@
+burn-store-0.21.0
+License selected: MIT
+Authors: Dilshod Tadjibaev (@antimora)
+Repository: https://github.com/tracel-ai/burn/tree/main/crates/burn-store
+Full standard license texts: licenses/license-texts/
+Corresponding source and original file notices: sources/cargo-dependencies.tar.gz
+

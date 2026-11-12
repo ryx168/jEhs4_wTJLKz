@@ -1,0 +1,7 @@
+burn-ir-0.21.0
+License selected: MIT
+Authors: laggui <lagrange.guillaume.1@gmail.com>, nathanielsimard <nathaniel.simard.42@gmail.com>
+Repository: https://github.com/tracel-ai/burn/tree/main/crates/burn-ir
+Full standard license texts: licenses/license-texts/
+Corresponding source and original file notices: sources/cargo-dependencies.tar.gz
+

@@ -1,0 +1,9 @@
+Manage usage telemetry
+
+Usage: tsrct telemetry [SETTING]
+
+Arguments:
+  [SETTING]  [default: status] [possible values: status, enable, disable]
+
+Options:
+  -h, --help  Print help

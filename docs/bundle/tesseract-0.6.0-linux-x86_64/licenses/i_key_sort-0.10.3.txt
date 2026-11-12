@@ -1,0 +1,7 @@
+i_key_sort-0.10.3
+License selected: MIT
+Authors: Nail Sharipov <nailxsharipov@gmail.com>
+Repository: https://github.com/iShape-Rust/iKeySort
+Full standard license texts: licenses/license-texts/
+Corresponding source and original file notices: sources/cargo-dependencies.tar.gz
+

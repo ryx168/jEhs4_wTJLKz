@@ -1,0 +1,7 @@
+spirv-0.4.0+sdk-1.4.341.0
+License selected: Apache-2.0
+Authors: Lei Zhang <antiagainst@gmail.com>
+Repository: https://github.com/gfx-rs/rspirv
+Full standard license texts: licenses/license-texts/
+Corresponding source and original file notices: sources/cargo-dependencies.tar.gz
+

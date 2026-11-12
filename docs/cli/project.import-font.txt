@@ -1,0 +1,8 @@
+Package a local TTF/OTF/TTC file
+
+Usage: tsrct project import-font --project <PROJECT> --file <FILE>
+
+Options:
+  -p, --project <PROJECT>  
+      --file <FILE>        Local font file to package into the document
+  -h, --help               Print help

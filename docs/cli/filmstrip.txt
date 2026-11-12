@@ -1,0 +1,55 @@
+Render a labeled PNG grid of project frames or one FX layer/group
+
+Usage: tsrct filmstrip [OPTIONS] --project <PROJECT>
+
+Options:
+  -p, --project <PROJECT>
+          Local .tsrct document to render
+  -o, --output <OUTPUT>
+          [default: filmstrip.png]
+      --timestamps-ms <TIMESTAMPS_MS>...
+          Project timeline timestamps, in milliseconds, in output order
+      --start-ms <START_MS>
+          Start of the project timeline range in milliseconds; defaults to 0
+      --duration-ms <DURATION_MS>
+          Positive timeline range duration in milliseconds; required for range sampling
+      --interval-ms <INTERVAL_MS>
+          Positive sample spacing in milliseconds; defaults to 1000, not a shutter cadence
+      --frame-rate <FRAME_RATE>
+          Output frames per second for shutter exposure, independent of sample spacing. Required for Scene3D shutter/motion blur, including --timestamps-ms and --interval-ms sampling
+      --fx-solo <FX_SOLO>
+          Isolate composition_id:layer_id over its full active window. Cannot be combined with --timestamps-ms or range sampling flags
+      --max-frames <MAX_FRAMES>
+          Maximum samples over the isolated layer's active window; requires --fx-solo
+      --content-bounds
+          Enlarge the FX target's stable measured bounds to fit each cell
+      --tile-width <TILE_WIDTH>
+          [default: 240]
+      --tile-height <TILE_HEIGHT>
+          [default: 135]
+      --items-per-row <ITEMS_PER_ROW>
+          [default: 5]
+      --hdr
+          Write a 16-bit BT.2020 PQ PNG, like preview --hdr
+      --renderer <RENDERER>
+          Scene3D renderer: raster (fast) or path-tracer (slow, physically based light; far slower without a hardware GPU) [default: raster] [possible values: raster, path-tracer]
+      --samples <SAMPLES>
+          Camera samples per pixel: raster export film/lens samples (default 64) or path-tracer samples (default 128); fewer render faster, noisier drafts
+      --max-bounces <MAX_BOUNCES>
+          Path-tracer bounces after the first hit, of every type together (default 12)
+      --diffuse-bounces <DIFFUSE_BOUNCES>
+          Path-tracer diffuse bounces (default 4)
+      --specular-bounces <SPECULAR_BOUNCES>
+          Path-tracer glossy reflection bounces (default 4)
+      --transmission-bounces <TRANSMISSION_BOUNCES>
+          Path-tracer bounces through glass and other transmissive surfaces (default 12)
+      --volume-bounces <VOLUME_BOUNCES>
+          Path-tracer scattering events in a medium (default 0, single scattering)
+      --indirect-clamp <INDIRECT_CLAMP>
+          Path-tracer largest summed RGB contribution of a sample after the first bounce (default 10; 0 is off)
+      --indirect-specular-blur <INDIRECT_SPECULAR_BLUR>
+          Path-tracer widening of glossy lobes after diffuse or rough bounces (default 1; 0 is off)
+      --no-denoise
+          Path trace without the denoiser
+  -h, --help
+          Print help

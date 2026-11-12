@@ -1,0 +1,7 @@
+zune-inflate-0.2.54
+License selected: MIT
+Authors: 
+Repository: None
+Full standard license texts: licenses/license-texts/
+Corresponding source and original file notices: sources/cargo-dependencies.tar.gz
+

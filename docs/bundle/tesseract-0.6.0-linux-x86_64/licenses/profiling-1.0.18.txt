@@ -1,0 +1,7 @@
+profiling-1.0.18
+License selected: MIT
+Authors: Philip Degarmo <aclysma@gmail.com>
+Repository: https://github.com/aclysma/profiling
+Full standard license texts: licenses/license-texts/
+Corresponding source and original file notices: sources/cargo-dependencies.tar.gz
+

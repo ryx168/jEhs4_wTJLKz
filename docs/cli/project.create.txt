@@ -1,0 +1,5 @@
+Usage: tsrct project create [OPTIONS]
+
+Options:
+  -p, --project <PROJECT>  [default: project.tsrct]
+  -h, --help               Print help

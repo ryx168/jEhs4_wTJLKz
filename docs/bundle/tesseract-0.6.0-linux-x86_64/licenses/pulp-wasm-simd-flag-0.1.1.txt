@@ -1,0 +1,7 @@
+pulp-wasm-simd-flag-0.1.1
+License selected: MIT
+Authors: sarah quiñones <sarah@veganb.tw>
+Repository: https://github.com/sarah-quinones/pulp/
+Full standard license texts: licenses/license-texts/
+Corresponding source and original file notices: sources/cargo-dependencies.tar.gz
+

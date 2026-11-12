@@ -1,0 +1,8 @@
+Write the authoritative editable document JSON to a local file
+
+Usage: tsrct project checkout --project <PROJECT> --output <OUTPUT>
+
+Options:
+  -p, --project <PROJECT>  
+  -o, --output <OUTPUT>    
+  -h, --help               Print help

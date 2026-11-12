@@ -1,0 +1,7 @@
+lyon_path-1.0.19
+License selected: MIT
+Authors: Nicolas Silva <nical@fastmail.com>
+Repository: https://github.com/nical/lyon
+Full standard license texts: licenses/license-texts/
+Corresponding source and original file notices: sources/cargo-dependencies.tar.gz
+

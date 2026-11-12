@@ -1,0 +1,8 @@
+Print the stored editable document JSON
+
+Usage: tsrct project inspect [OPTIONS] --project <PROJECT>
+
+Options:
+  -p, --project <PROJECT>  
+      --pretty             
+  -h, --help               Print help

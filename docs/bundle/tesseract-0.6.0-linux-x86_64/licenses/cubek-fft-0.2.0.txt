@@ -1,0 +1,7 @@
+cubek-fft-0.2.0
+License selected: MIT
+Authors: Sublime12, louisfd
+Repository: https://github.com/tracel-ai/cubek/tree/main/crates/cubek-fft
+Full standard license texts: licenses/license-texts/
+Corresponding source and original file notices: sources/cargo-dependencies.tar.gz
+

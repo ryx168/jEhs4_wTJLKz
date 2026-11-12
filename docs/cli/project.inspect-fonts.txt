@@ -1,0 +1,8 @@
+Inspect every font embedded in a reopened document
+
+Usage: tsrct project inspect-fonts [OPTIONS] --project <PROJECT>
+
+Options:
+  -p, --project <PROJECT>  
+      --pretty             
+  -h, --help               Print help

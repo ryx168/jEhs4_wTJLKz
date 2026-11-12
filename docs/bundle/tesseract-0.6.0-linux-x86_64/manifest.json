@@ -1,0 +1,9 @@
+{
+  "version": "0.6.0",
+  "sourceCommit": "023251bf2f6e5546f38d68854d2193f061bca53d",
+  "platform": "linux",
+  "architecture": "x86_64",
+  "buildRun": "42226443798",
+  "buildAttempt": "1",
+  "minimumGlibc": "2.35"
+}

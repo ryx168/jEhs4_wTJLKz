@@ -1,0 +1,35 @@
+Render one PNG preview frame. For isolated layers use filmstrip --fx-solo
+
+Usage: tsrct preview [OPTIONS] --project <PROJECT> --time <TIME> --output <OUTPUT>
+
+Options:
+  -p, --project <PROJECT>
+          
+  -t, --time <TIME>
+          
+  -o, --output <OUTPUT>
+          
+      --hdr
+          Write a 16-bit PQ BT.2020 PNG instead of an 8-bit SDR PNG
+      --renderer <RENDERER>
+          Scene3D renderer: raster (fast) or path-tracer (slow, physically based light; far slower without a hardware GPU) [default: raster] [possible values: raster, path-tracer]
+      --samples <SAMPLES>
+          Camera samples per pixel: raster export film/lens samples (default 64) or path-tracer samples (default 128); fewer render faster, noisier drafts
+      --max-bounces <MAX_BOUNCES>
+          Path-tracer bounces after the first hit, of every type together (default 12)
+      --diffuse-bounces <DIFFUSE_BOUNCES>
+          Path-tracer diffuse bounces (default 4)
+      --specular-bounces <SPECULAR_BOUNCES>
+          Path-tracer glossy reflection bounces (default 4)
+      --transmission-bounces <TRANSMISSION_BOUNCES>
+          Path-tracer bounces through glass and other transmissive surfaces (default 12)
+      --volume-bounces <VOLUME_BOUNCES>
+          Path-tracer scattering events in a medium (default 0, single scattering)
+      --indirect-clamp <INDIRECT_CLAMP>
+          Path-tracer largest summed RGB contribution of a sample after the first bounce (default 10; 0 is off)
+      --indirect-specular-blur <INDIRECT_SPECULAR_BLUR>
+          Path-tracer widening of glossy lobes after diffuse or rough bounces (default 1; 0 is off)
+      --no-denoise
+          Path trace without the denoiser
+  -h, --help
+          Print help

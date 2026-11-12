@@ -1,0 +1,7 @@
+gpu-descriptor-0.3.2
+License selected: MIT
+Authors: Zakarum <zakarumych@ya.ru>
+Repository: https://github.com/zakarumych/gpu-descriptor
+Full standard license texts: licenses/license-texts/
+Corresponding source and original file notices: sources/cargo-dependencies.tar.gz
+

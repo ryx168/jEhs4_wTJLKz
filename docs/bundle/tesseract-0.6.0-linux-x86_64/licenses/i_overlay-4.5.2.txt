@@ -1,0 +1,7 @@
+i_overlay-4.5.2
+License selected: MIT
+Authors: Nail Sharipov <nailxsharipov@gmail.com>
+Repository: https://github.com/iShape-Rust/iOverlay
+Full standard license texts: licenses/license-texts/
+Corresponding source and original file notices: sources/cargo-dependencies.tar.gz
+

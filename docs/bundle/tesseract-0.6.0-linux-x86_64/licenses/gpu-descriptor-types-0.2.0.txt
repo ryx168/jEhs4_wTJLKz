@@ -1,0 +1,7 @@
+gpu-descriptor-types-0.2.0
+License selected: MIT
+Authors: Zakarum <zakarumych@ya.ru>
+Repository: https://github.com/zakarumych/gpu-descriptor
+Full standard license texts: licenses/license-texts/
+Corresponding source and original file notices: sources/cargo-dependencies.tar.gz
+

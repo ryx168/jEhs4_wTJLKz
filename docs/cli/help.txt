@@ -1,0 +1,5 @@
+error: unrecognized subcommand '--help'
+
+Usage: tsrct <COMMAND>
+
+For more information, try '--help'.

@@ -1,0 +1,7 @@
+ffmpeg-sys-next-8.1.0
+License selected: WTFPL
+Authors: meh. <meh@schizofreni.co>, Zhiming Wang <i@zhimingwang.org>
+Repository: https://github.com/zmwangx/rust-ffmpeg-sys
+Full standard license texts: licenses/license-texts/
+Corresponding source and original file notices: sources/cargo-dependencies.tar.gz
+

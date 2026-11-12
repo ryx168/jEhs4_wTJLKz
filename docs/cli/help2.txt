@@ -1,0 +1,19 @@
+Local CLI for creating, editing, previewing, and exporting videos with Tesseract
+
+Usage: tsrct <COMMAND>
+
+Commands:
+  telemetry     Manage usage telemetry
+  project       Create, inspect, and edit a local FX document
+  preview       Render one PNG preview frame. For isolated layers use filmstrip --fx-solo
+  filmstrip     Render a labeled PNG grid of project frames or one FX layer/group
+  export        Export an MP4 or ProRes 4444 MOV; use --fx-solo for a transparent overlay
+  export-audio  Export the document's audio mix as 16-bit PCM WAV without rendering video
+  evaluate      Measure the document at one time or over an export range without rendering video or changing it; prints JSON Lines (see --list)
+  help          Print this message or the help of the given subcommand(s)
+
+Options:
+  -h, --help     Print help
+  -V, --version  Print version
+
+fxSchemaVersion (this build): 86

@@ -1,0 +1,14 @@
+[
+  {
+    "name": "MediaPipe Selfie Segmentation (general)",
+    "crate": "segmenter",
+    "license": "Apache-2.0",
+    "source": "https://storage.googleapis.com/mediapipe-assets/selfie_segmentation.tflite"
+  },
+  {
+    "name": "PP-HumanSegV2-Lite portrait",
+    "crate": "segmenter",
+    "license": "Apache-2.0",
+    "source": "https://github.com/PaddlePaddle/PaddleSeg/tree/release/2.10/contrib/PP-HumanSeg"
+  }
+]

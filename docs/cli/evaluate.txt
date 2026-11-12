@@ -1,0 +1,19 @@
+Measure the document at one time or over an export range without rendering video or changing it; prints JSON Lines (see --list)
+
+Usage: tsrct evaluate [OPTIONS]
+
+Options:
+  -p, --project <PROJECT>              Local .tsrct document to evaluate
+      --time-ms <TIME_MS>              Evaluate one composition time, in milliseconds, instead of a range
+      --fps <FPS>                      Samples per second over a range: the range samples exactly the frames `export` renders at this frame rate [default: 30]
+      --start-ms <START_MS>            Start of the range in milliseconds (defaults to 0)
+      --duration-ms <DURATION_MS>      Length of the range in milliseconds (defaults to the remaining duration)
+      --start-frame <START_FRAME>      First frame of the range, at N/fps seconds
+      --frame-count <FRAME_COUNT>      Exact frame count (defaults to all frames remaining after --start-frame)
+      --target <KIND:SELECTOR>         Evaluate only this target (repeatable): `scene3d:<compositionId>:<layerId>` for a Scene3D layer or `scene3d:<compositionId>:<layerId>/<itemId>` for one of its items. By default every target is evaluated; layers nothing evaluates are listed in the summary's `notEvaluated`
+      --report <REPORT>                Measurements to output, comma-separated; see --list. Defaults to `scene3d.items`, or to none when --checks is given, so a checked range prints only its issues and the summary. `fx.*` reports and checks measure 2D FX layers and ignore --target
+      --report-arg <REPORT:KEY=VALUE>  A report parameter (repeatable), e.g. `scene3d.topology:faces=true`
+      --checks <CHECKS>                Checks to run, comma-separated, e.g. `scene3d.framing,scene3d.motion`; each finding is one `issue` record over the consecutive samples it holds for (`timeRangeMs`, `samples`, worst `measured`). See --list
+      --check-arg <CHECK:KEY=VALUE>    A check parameter (repeatable), e.g. `scene3d.grounding:pair=20=3`
+      --list                           Print every available report and check, with its parameters, and exit
+  -h, --help                           Print help

@@ -1,0 +1,7 @@
+hexf-parse-0.2.1
+License selected: CC0-1.0
+Authors: Kang Seonghoon <public+rust@mearie.org>
+Repository: https://github.com/lifthrasiir/hexf
+Full standard license texts: licenses/license-texts/
+Corresponding source and original file notices: sources/cargo-dependencies.tar.gz
+

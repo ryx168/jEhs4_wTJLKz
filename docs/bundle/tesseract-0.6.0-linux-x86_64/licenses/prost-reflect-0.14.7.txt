@@ -1,0 +1,7 @@
+prost-reflect-0.14.7
+License selected: MIT
+Authors: Andrew Hickman <andrew.hickman1@sky.com>
+Repository: https://github.com/andrewhickman/prost-reflect
+Full standard license texts: licenses/license-texts/
+Corresponding source and original file notices: sources/cargo-dependencies.tar.gz
+

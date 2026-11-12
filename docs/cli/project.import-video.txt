@@ -1,0 +1,9 @@
+Package local MP4/MOV footage; use the returned asset ID in an FX video layer
+
+Usage: tsrct project import-video --project <PROJECT> --file <FILE> --asset-id <ASSET_ID>
+
+Options:
+  -p, --project <PROJECT>    
+      --file <FILE>          
+      --asset-id <ASSET_ID>  New document-local identifier, e.g. footage-1
+  -h, --help                 Print help

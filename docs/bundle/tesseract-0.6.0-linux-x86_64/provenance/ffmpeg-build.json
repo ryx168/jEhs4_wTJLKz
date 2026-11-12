@@ -1,0 +1,26 @@
+{
+  "version": "7.1.5",
+  "sourceSha256": "de668509caf9e35e3cd162473441fdb29538c6d96ed080292b3cf9e6fc5d558f",
+  "options": [
+    "--enable-shared",
+    "--disable-static",
+    "--disable-autodetect",
+    "--disable-gpl",
+    "--disable-nonfree",
+    "--disable-version3",
+    "--disable-doc",
+    "--disable-debug",
+    "--disable-ffplay",
+    "--disable-network",
+    "--disable-indevs",
+    "--disable-outdevs",
+    "--enable-x86asm",
+    "--enable-zlib"
+  ],
+  "architecture": "x86_64",
+  "deploymentTarget": "14.0",
+  "zlib": "system",
+  "compiler": "cc (Ubuntu 11.4.0-1ubuntu1~22.04.3) 11.4.0\nCopyright (C) 2021 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.",
+  "libc": "ldd (Ubuntu GLIBC 2.35-0ubuntu3.14) 2.35\nCopyright (C) 2022 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\nWritten by Roland McGrath and Ulrich Drepper.",
+  "prefix": "/home/runner/_work/jerboa/jerboa/target/public-ffmpeg"
+}

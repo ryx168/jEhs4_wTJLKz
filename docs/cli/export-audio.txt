@@ -1,0 +1,14 @@
+Export the document's audio mix as 16-bit PCM WAV without rendering video
+
+Usage: tsrct export-audio [OPTIONS] --project <PROJECT> --output <OUTPUT>
+
+Options:
+  -p, --project <PROJECT>          
+  -o, --output <OUTPUT>            Destination .wav file, published atomically; must not alias the project
+      --json                       Print {"outputPath": ...} on stdout
+      --fps <FPS>                  Frame rate used to interpret frame ranges [default: 30]
+      --start-ms <START_MS>        Start time in milliseconds (defaults to zero)
+      --duration-ms <DURATION_MS>  Duration in milliseconds (defaults to the remaining duration)
+      --start-frame <START_FRAME>  First source frame at N/fps seconds
+      --frame-count <FRAME_COUNT>  Exact frame count (defaults to all remaining frames)
+  -h, --help                       Print help

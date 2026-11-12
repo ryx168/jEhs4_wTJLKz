@@ -1,0 +1,7 @@
+rust-format-0.3.4
+License selected: MIT
+Authors: Scott Meeuwsen <smeeuwsen@gmail.com>
+Repository: https://github.com/nu11ptr/flexgen/tree/master/rust_format
+Full standard license texts: licenses/license-texts/
+Corresponding source and original file notices: sources/cargo-dependencies.tar.gz
+

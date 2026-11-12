@@ -1,0 +1,7 @@
+cubecl-std-0.10.0
+License selected: MIT
+Authors: nathanielsimard <nathaniel.simard.42@gmail.com>, louisfd <louisfd94@gmail.com>, maxtremblay <t.maxime@pm.me>
+Repository: https://github.com/tracel-ai/cubecl/tree/main/crates/cubecl-std
+Full standard license texts: licenses/license-texts/
+Corresponding source and original file notices: sources/cargo-dependencies.tar.gz
+

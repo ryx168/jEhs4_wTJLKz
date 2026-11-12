@@ -1,0 +1,5 @@
+Usage: tsrct project schema [OPTIONS]
+
+Options:
+      --document  Print the editable document schema instead of the engine action schema
+  -h, --help      Print help

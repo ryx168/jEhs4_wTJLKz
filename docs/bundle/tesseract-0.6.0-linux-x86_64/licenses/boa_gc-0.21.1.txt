@@ -1,0 +1,7 @@
+boa_gc-0.21.1
+License selected: Unlicense
+Authors: boa-dev
+Repository: https://github.com/boa-dev/boa
+Full standard license texts: licenses/license-texts/
+Corresponding source and original file notices: sources/cargo-dependencies.tar.gz
+

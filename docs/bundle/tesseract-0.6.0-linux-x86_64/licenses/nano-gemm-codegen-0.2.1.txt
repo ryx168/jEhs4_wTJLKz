@@ -1,0 +1,7 @@
+nano-gemm-codegen-0.2.1
+License selected: MIT
+Authors: sarah <>
+Repository: https://github.com/sarah-ek/nano-gemm/
+Full standard license texts: licenses/license-texts/
+Corresponding source and original file notices: sources/cargo-dependencies.tar.gz
+

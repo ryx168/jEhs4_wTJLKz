@@ -1,0 +1,7 @@
+crc-catalog-2.5.0
+License selected: MIT
+Authors: Akhil Velagapudi <akhilvelagapudi@gmail.com>
+Repository: https://github.com/akhilles/crc-catalog.git
+Full standard license texts: licenses/license-texts/
+Corresponding source and original file notices: sources/cargo-dependencies.tar.gz
+

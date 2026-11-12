@@ -1,0 +1,25 @@
+Package local audio, an image, a .cube LUT, or a Scene3D model, IES profile or point cache; use the returned asset ID in editable layers or effects
+
+Usage: tsrct project import-asset --project <PROJECT> --file <FILE> --asset-id <ASSET_ID> --kind <KIND>
+
+Options:
+  -p, --project <PROJECT>
+          Local .tsrct document to add the packaged asset to
+
+      --file <FILE>
+          Local source file to package into the document
+
+      --asset-id <ASSET_ID>
+          New document-local identifier referenced by items, e.g. bottle
+
+      --kind <KIND>
+          Possible values:
+          - model3d:     A binary glTF (.glb) or Blender (.blend) model for a Scene3D Model3D item; a .blend is converted natively (no Blender needed) and the result lists what the conversion could not carry over. Normalized on import; the result lists its nodes, materials, clips, sourceRevision and bounds
+          - ies:         LM-63-2002 Type C photometry, with TILT=NONE
+          - point-cache: A prepared Scene3D cloth point cache (.s3dpc)
+          - audio
+          - image
+          - lut:         A 3D color lookup table (.cube) for Creative LUT or Input Transform
+
+  -h, --help
+          Print help (see a summary with '-h')

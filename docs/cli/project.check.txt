@@ -1,0 +1,8 @@
+Validate IDs, references and packaged assets without writing anything. Prints {valid, diagnostics, warnings}; invalid documents exit with status 1
+
+Usage: tsrct project check [OPTIONS] --project <PROJECT>
+
+Options:
+  -p, --project <PROJECT>    
+      --document <DOCUMENT>  Validate a checked-out editable document instead of the packaged document
+  -h, --help                 Print help

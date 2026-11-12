@@ -1,0 +1,7 @@
+dasp_sample-0.11.0
+License selected: MIT
+Authors: mitchmindtree <mitchell.nordine@gmail.com>
+Repository: https://github.com/rustaudio/sample.git
+Full standard license texts: licenses/license-texts/
+Corresponding source and original file notices: sources/cargo-dependencies.tar.gz
+

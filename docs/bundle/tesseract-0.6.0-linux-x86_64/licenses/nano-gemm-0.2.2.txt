@@ -1,0 +1,7 @@
+nano-gemm-0.2.2
+License selected: MIT
+Authors: 
+Repository: https://github.com/sarah-ek/nano-gemm/
+Full standard license texts: licenses/license-texts/
+Corresponding source and original file notices: sources/cargo-dependencies.tar.gz
+
