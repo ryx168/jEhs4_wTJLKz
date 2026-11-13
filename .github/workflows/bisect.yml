@@ -1,0 +1,38 @@
+name: bisect
+on:
+  workflow_dispatch:
+    inputs:
+      only:
+        description: run only variants whose name contains this
+        default: ""
+permissions:
+  contents: write
+jobs:
+  bisect:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+      - run: bash pipeline/install-tsrct.sh
+      - run: pip install -q edge-tts && python3 pipeline/tts.py
+      - name: Bisect
+        run: |
+          mkdir -p project/.tesseract-work
+          ONLY="${{ github.event.inputs.only }}" python3 pipeline/bisect.py 2>&1 | tee project/.tesseract-work/bisect.log
+      - uses: actions/upload-artifact@v4
+        with:
+          name: bisect
+          path: |
+            project/.tesseract-work/bisect.log
+            project/.tesseract-work/bisect/*.png
+      - name: Commit result
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          mkdir -p previews/bisect
+          cp project/.tesseract-work/bisect.log previews/bisect/
+          cp project/.tesseract-work/bisect/*.png previews/bisect/ 2>/dev/null || true
+          git add previews/bisect
+          git commit -m "bisect: run ${{ github.run_number }} [skip ci]" || true
+          git pull --rebase -q || true
+          git push
