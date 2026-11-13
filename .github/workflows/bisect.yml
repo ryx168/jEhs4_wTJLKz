@@ -5,6 +5,9 @@ on:
       only:
         description: run only variants whose name contains this
         default: ""
+      mode:
+        description: ingredients | scenes
+        default: scenes
 permissions:
   contents: write
 jobs:
@@ -18,7 +21,7 @@ jobs:
       - name: Bisect
         run: |
           mkdir -p project/.tesseract-work
-          ONLY="${{ github.event.inputs.only }}" python3 pipeline/find_nan.py 2>&1 | tee project/.tesseract-work/bisect.log
+          MODE="${{ github.event.inputs.mode }}" ONLY="${{ github.event.inputs.only }}" python3 pipeline/find_nan.py 2>&1 | tee project/.tesseract-work/bisect.log
       - uses: actions/upload-artifact@v4
         with:
           name: bisect

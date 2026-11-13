@@ -133,16 +133,91 @@ variants = [("v01_smoke", v01), ("v02_world", v02), ("v03_physcam", v03), ("v04_
             ("v06_point", v06), ("v07_floor", v07), ("v08_metal", v08), ("v09_emissive0", v09), ("v10_text3d", v10),
             ("v11_text3d_nobevel", v11), ("v12_fade", v12), ("v14_shadows", v14), ("v16_grid", v16), ("v17_bevelmod", v17)]
 only = os.environ.get("ONLY")
-for name, fn in variants:
+for name, fn in (variants if os.environ.get("MODE") != "scenes" else []):
     if only and only not in name:
         continue
     try:
         variant(name, fn)
     except Exception as e:
         print(f"{name}: EXC {e}")
-variant("v18_overlay2d", v01, overlays=True)
-variant("v19_nofont_smoke", v01, font=False)
-variant("v20_smoke_filmstrip", v01, mode="filmstrip")
-variant("v21_fade_t0", v12, time_s=0.0)
-variant("v22_fade_filmstrip", v12, mode="filmstrip")
-variant("v23_smoke_t0", v01, time_s=0.0)
+if os.environ.get("MODE") != "scenes":
+    variant("v18_overlay2d", v01, overlays=True)
+    variant("v19_nofont_smoke", v01, font=False)
+    variant("v20_smoke_filmstrip", v01, mode="filmstrip")
+    variant("v21_fade_t0", v12, time_s=0.0)
+    variant("v22_fade_filmstrip", v12, mode="filmstrip")
+    variant("v23_smoke_t0", v01, time_s=0.0)
+
+
+# ----------------------------------------------------------------- scene-level mode
+def scene_doc(name, fns, overlays=False, audio=False):
+    """Build a 1920x1080 document of full length holding only the given scene builders."""
+    doc = OUT / f"{name}.tsrct"
+    if doc.exists():
+        doc.unlink()
+    tsrct("project", "create", "--project", doc)
+    for p in (os.environ.get("FONT_BOLD", "/usr/share/fonts/opentype/noto/NotoSansCJK-Bold.ttc"),
+              os.environ.get("FONT_REG", "/usr/share/fonts/opentype/noto/NotoSansCJK-Regular.ttc")):
+        tsrct("project", "import-font", "--project", doc, "--file", p)
+    ed = OUT / f"{name}.editable.json"
+    tsrct("project", "checkout", "--project", doc, "--output", ed)
+    d = json.load(open(ed, encoding="utf-8"))
+    B.set_key(d, "dimensions", {"width": 1920, "height": 1080}, [0])
+    d["duration"] = B.TOTAL
+    comp, _ = B.find_layers(d)
+    if comp is not None and "duration" in comp:
+        comp["duration"] = B.TOTAL
+    d["backgroundColor"] = [0, 0, 0, 1]
+    json.dump(d, open(ed, "w", encoding="utf-8"))
+    rc, out = tsrct("project", "commit", "--project", doc, "--file", ed)
+    if rc:
+        print(f"{name}: COMMIT FAILED {out[-300:]}"); return None
+    B.OVERLAYS.clear()
+    built = []
+    for fn in fns:
+        s = fn()
+        p = OUT / f"{name}.{s.sid}.json"
+        json.dump(s.acts, open(p, "w", encoding="utf-8"), ensure_ascii=False)
+        rc, out = tsrct("project", "apply", "--project", doc, "--actions", p)
+        if rc:
+            print(f"{name}: APPLY {s.sid} FAILED {out[-400:]}"); return None
+        built.append(s)
+    if overlays:
+        q = OUT / f"{name}.ov.json"
+        json.dump(B.OVERLAYS, open(q, "w", encoding="utf-8"), ensure_ascii=False)
+        rc, out = tsrct("project", "apply", "--project", doc, "--actions", q)
+        if rc:
+            print(f"{name}: OVERLAY APPLY FAILED {out[-400:]}"); return None
+    return doc, built
+
+def render_checks(name, doc, t0_ms, dur_ms):
+    checks = [("preview_mid", ["preview", "--project", doc, "--time", (t0_ms + min(2000, dur_ms // 2)) / 1000, "--samples", 1, "--output", OUT / f"{name}.mid.png"]),
+              ("preview_t0", ["preview", "--project", doc, "--time", t0_ms / 1000, "--samples", 1, "--output", OUT / f"{name}.t0.png"]),
+              ("filmstrip", ["filmstrip", "--project", doc, "--timestamps-ms", f"{t0_ms},{t0_ms + 1500},{t0_ms + min(4000, dur_ms - 100)}", "--frame-rate", 30,
+                             "--items-per-row", 3, "--tile-width", 640, "--tile-height", 360, "--samples", 4, "--output", OUT / f"{name}.strip.png"])]
+    for label, args in checks:
+        rc, out = tsrct(*args)
+        last = "" if rc == 0 else out.strip().splitlines()[-1][:140]
+        print(f"{name} {label}: {'PASS' if rc == 0 else 'FAIL'} {last}", flush=True)
+
+if os.environ.get("MODE") == "scenes":
+    fns = [B.scene_S1, B.scene_S2, B.scene_S3, B.scene_S4, B.scene_S5, B.scene_S6, B.scene_S7, B.scene_S8]
+    only = os.environ.get("ONLY", "")
+    for fn in fns:
+        sid = fn.__name__[-2:]
+        if only and only not in sid:
+            continue
+        r = scene_doc(f"solo_{sid}", [fn])
+        if r:
+            doc, built = r
+            render_checks(f"solo_{sid}", doc, built[0].t0, built[0].dur)
+    if not only:
+        r = scene_doc("all_scenes_noov", fns)
+        if r:
+            doc, built = r
+            render_checks("all_scenes_noov", doc, built[3].t0, built[3].dur)
+        r = scene_doc("all_scenes_ov", fns, overlays=True)
+        if r:
+            doc, built = r
+            render_checks("all_scenes_ov", doc, built[3].t0, built[3].dur)
+    sys.exit(0)
