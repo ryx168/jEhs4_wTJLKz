@@ -1,21 +1,30 @@
-v01_smoke: PASS 
-v02_world: PASS 
-v03_physcam: PASS 
-v04_area: PASS 
-v05_spot: PASS 
-v06_point: PASS 
-v07_floor: PASS 
-v08_metal: PASS 
-v09_emissive0: PASS 
-v10_text3d: PASS 
-v11_text3d_nobevel: PASS 
-v12_fade: PASS 
-v14_shadows: PASS 
-v16_grid: PASS 
-v17_bevelmod: PASS 
-v18_overlay2d: PASS 
-v19_nofont_smoke: PASS 
-v20_smoke_filmstrip: PASS 
-v21_fade_t0: PASS 
-v22_fade_filmstrip: PASS 
-v23_smoke_t0: PASS 
+solo_S1 preview_mid: FAIL Error: Render failed: Invalid radiance in frame 1: numeric flags 0x1 (bits: input=1, add=2, mul=4, domain=8, div=16; other bits=unknown): In
+solo_S1 preview_t0: FAIL Error: Render failed: Invalid radiance in frame 1: numeric flags 0x1 (bits: input=1, add=2, mul=4, domain=8, div=16; other bits=unknown): In
+solo_S1 filmstrip: FAIL Error: Render failed: Invalid radiance in frame 1: numeric flags 0x1 (bits: input=1, add=2, mul=4, domain=8, div=16; other bits=unknown): In
+solo_S2 preview_mid: FAIL Error: Render failed: Invalid radiance in frame 1: numeric flags 0x1 (bits: input=1, add=2, mul=4, domain=8, div=16; other bits=unknown): In
+solo_S2 preview_t0: FAIL Error: Render failed: Invalid radiance in frame 1: numeric flags 0x1 (bits: input=1, add=2, mul=4, domain=8, div=16; other bits=unknown): In
+solo_S2 filmstrip: FAIL Error: Render failed: Invalid radiance in frame 1: numeric flags 0x1 (bits: input=1, add=2, mul=4, domain=8, div=16; other bits=unknown): In
+solo_S3 preview_mid: PASS 
+solo_S3 preview_t0: FAIL Error: Render failed: Invalid radiance in frame 1: numeric flags 0x1 (bits: input=1, add=2, mul=4, domain=8, div=16; other bits=unknown): In
+solo_S3 filmstrip: FAIL Error: Render failed: Invalid radiance in frame 1: numeric flags 0x1 (bits: input=1, add=2, mul=4, domain=8, div=16; other bits=unknown): In
+solo_S4 preview_mid: FAIL Error: Render failed: Invalid radiance in frame 1: numeric flags 0x1 (bits: input=1, add=2, mul=4, domain=8, div=16; other bits=unknown): In
+solo_S4 preview_t0: FAIL Error: Render failed: Invalid radiance in frame 1: numeric flags 0x1 (bits: input=1, add=2, mul=4, domain=8, div=16; other bits=unknown): In
+solo_S4 filmstrip: FAIL Error: Render failed: Invalid radiance in frame 1: numeric flags 0x1 (bits: input=1, add=2, mul=4, domain=8, div=16; other bits=unknown): In
+solo_S5 preview_mid: FAIL Error: Render failed: Invalid radiance in frame 1: numeric flags 0x1 (bits: input=1, add=2, mul=4, domain=8, div=16; other bits=unknown): In
+solo_S5 preview_t0: FAIL Error: Render failed: Invalid radiance in frame 1: numeric flags 0x1 (bits: input=1, add=2, mul=4, domain=8, div=16; other bits=unknown): In
+solo_S5 filmstrip: FAIL Error: Render failed: Invalid radiance in frame 1: numeric flags 0x1 (bits: input=1, add=2, mul=4, domain=8, div=16; other bits=unknown): In
+solo_S6 preview_mid: FAIL Error: Render failed: Invalid radiance in frame 1: numeric flags 0x1 (bits: input=1, add=2, mul=4, domain=8, div=16; other bits=unknown): In
+solo_S6 preview_t0: FAIL Error: Render failed: Invalid radiance in frame 1: numeric flags 0x1 (bits: input=1, add=2, mul=4, domain=8, div=16; other bits=unknown): In
+solo_S6 filmstrip: FAIL Error: Render failed: Invalid radiance in frame 1: numeric flags 0x1 (bits: input=1, add=2, mul=4, domain=8, div=16; other bits=unknown): In
+solo_S7 preview_mid: FAIL Error: Render failed: Invalid radiance in frame 1: numeric flags 0x1 (bits: input=1, add=2, mul=4, domain=8, div=16; other bits=unknown): In
+solo_S7 preview_t0: FAIL Error: Render failed: Invalid radiance in frame 1: numeric flags 0x1 (bits: input=1, add=2, mul=4, domain=8, div=16; other bits=unknown): In
+solo_S7 filmstrip: FAIL Error: Render failed: Invalid radiance in frame 1: numeric flags 0x1 (bits: input=1, add=2, mul=4, domain=8, div=16; other bits=unknown): In
+solo_S8 preview_mid: FAIL Error: Render failed: Invalid radiance in frame 1: numeric flags 0x1 (bits: input=1, add=2, mul=4, domain=8, div=16; other bits=unknown): In
+solo_S8 preview_t0: FAIL Error: Render failed: Invalid radiance in frame 1: numeric flags 0x1 (bits: input=1, add=2, mul=4, domain=8, div=16; other bits=unknown): In
+solo_S8 filmstrip: FAIL Error: Render failed: Invalid radiance in frame 1: numeric flags 0x1 (bits: input=1, add=2, mul=4, domain=8, div=16; other bits=unknown): In
+all_scenes_noov preview_mid: FAIL Error: Render failed: Invalid radiance in frame 1: numeric flags 0x1 (bits: input=1, add=2, mul=4, domain=8, div=16; other bits=unknown): In
+all_scenes_noov preview_t0: FAIL Error: Render failed: Invalid radiance in frame 1: numeric flags 0x1 (bits: input=1, add=2, mul=4, domain=8, div=16; other bits=unknown): In
+all_scenes_noov filmstrip: FAIL Error: Render failed: Invalid radiance in frame 1: numeric flags 0x1 (bits: input=1, add=2, mul=4, domain=8, div=16; other bits=unknown): In
+all_scenes_ov preview_mid: FAIL Error: Render failed: Invalid radiance in frame 1: numeric flags 0x1 (bits: input=1, add=2, mul=4, domain=8, div=16; other bits=unknown): In
+all_scenes_ov preview_t0: FAIL Error: Render failed: Invalid radiance in frame 1: numeric flags 0x1 (bits: input=1, add=2, mul=4, domain=8, div=16; other bits=unknown): In
+all_scenes_ov filmstrip: FAIL Error: Render failed: Invalid radiance in frame 1: numeric flags 0x1 (bits: input=1, add=2, mul=4, domain=8, div=16; other bits=unknown): In
