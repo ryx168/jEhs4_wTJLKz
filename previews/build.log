@@ -1,0 +1,216 @@
+$ project create --project /home/runner/work/jEhs4_wTJLKz/jEhs4_wTJLKz/project/project.tsrct
+{"project":"/home/runner/work/jEhs4_wTJLKz/jEhs4_wTJLKz/project/project.tsrct"}
+$ project schema --document
+{
+  "$defs": {
+    "JBAffineOffset3DModel": {
+      "additionalProperties": false,
+      "properties": {
+        "matrix": {
+          "maxItems": 4,
+          "minItems": 4,
+          "prefixItems": [
+            {
+              "maxItems": 4,
+              "minItems": 4,
+              "prefixItems": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "number"
+                }
+              ],
+              "type": "array"
+            },
+            {
+              "maxItems": 4,
+              "minItems": 4,
+              "prefixItems": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "number"
+                }
+              ],
+              "type": "array"
+            },
+            {
+              "maxItems": 4,
+              "minItems": 4,
+              "prefixI ...
+$ project import-font --project /home/runner/work/jEhs4_wTJLKz/jEhs4_wTJLKz/project/project.tsrct --file /usr/share/fonts/opentype/noto/NotoSansCJK-Bold.ttc
+warning: the local font is embedded in the .tsrct file; only share or upload it when its license permits redistribution
+{"assetId":"font-faa5f3656a78b2e2d450d27fe8382c778bc2b6bb5ea29c986664a6a435056ceb","faces":[{"coveredScripts":["cyrillic","greek"],"faceIndex":0,"familyName":"Noto Sans CJK JP","fullName":"Noto Sans CJK JP Bold","isSerif":false,"italic":false,"postscriptName":"NotoSansCJKjp-Bold","selectionNames":["Noto Sans CJK JP/Bold"],"styleName":"Bold","variationInstances":[],"weight":700,"width":5},{"coveredScripts":["cyrillic","greek"],"faceIndex":1,"familyName":"Noto Sans CJK KR","fullName":"Noto Sans CJK KR Bold","isSerif":false,"italic":false,"postscriptName":"NotoSansCJKkr-Bold","selectionNames":["Noto Sans CJK KR/Bold"],"styleName":"Bold","variationInstances":[],"weight":700,"width":5},{"coveredScripts":["cyrillic","greek"],"faceIndex":2,"familyName":"Noto Sans CJK SC","fullName":"Noto Sans CJK SC Bold","isSerif":false,"italic":false,"postscriptName":"NotoSansCJKsc-Bold","selectionNames":["Noto Sans CJK SC/Bold"],"styleName":"Bold","variationInstances":[],"weight":700,"width":5},{"coveredScripts":["cyrillic","greek"],"faceIndex":3,"familyName":"Noto Sans CJK TC","fullName":"Noto Sans CJK TC Bold","isSerif":false,"italic":false,"postscriptName":"NotoSansCJKtc-Bold","selectionNames":["Not ...
+$ project import-font --project /home/runner/work/jEhs4_wTJLKz/jEhs4_wTJLKz/project/project.tsrct --file /usr/share/fonts/opentype/noto/NotoSansCJK-Regular.ttc
+warning: the local font is embedded in the .tsrct file; only share or upload it when its license permits redistribution
+{"assetId":"font-b76b0433203017ca80401b2ee0dd69350349871c4b19d504c34dbdd80541690a","faces":[{"coveredScripts":["cyrillic","greek"],"faceIndex":0,"familyName":"Noto Sans CJK JP","fullName":"Noto Sans CJK JP","isSerif":false,"italic":false,"postscriptName":"NotoSansCJKjp-Regular","selectionNames":["Noto Sans CJK JP/Regular"],"styleName":"Regular","variationInstances":[],"weight":400,"width":5},{"coveredScripts":["cyrillic","greek"],"faceIndex":1,"familyName":"Noto Sans CJK KR","fullName":"Noto Sans CJK KR","isSerif":false,"italic":false,"postscriptName":"NotoSansCJKkr-Regular","selectionNames":["Noto Sans CJK KR/Regular"],"styleName":"Regular","variationInstances":[],"weight":400,"width":5},{"coveredScripts":["cyrillic","greek"],"faceIndex":2,"familyName":"Noto Sans CJK SC","fullName":"Noto Sans CJK SC","isSerif":false,"italic":false,"postscriptName":"NotoSansCJKsc-Regular","selectionNames":["Noto Sans CJK SC/Regular"],"styleName":"Regular","variationInstances":[],"weight":400,"width":5},{"coveredScripts":["cyrillic","greek"],"faceIndex":3,"familyName":"Noto Sans CJK TC","fullName":"Noto Sans CJK TC","isSerif":false,"italic":false,"postscriptName":"NotoSansCJKtc-Regular","selectionNa ...
+fonts: {'family': 'Noto Sans CJK SC', 'style': 'Bold'} {'family': 'Noto Sans CJK SC', 'style': 'Regular'}
+$ project inspect-fonts --project /home/runner/work/jEhs4_wTJLKz/jEhs4_wTJLKz/project/project.tsrct --pretty
+{
+  "fonts": [
+    {
+      "assetId": "font-b76b0433203017ca80401b2ee0dd69350349871c4b19d504c34dbdd80541690a",
+      "properties": {
+        "faces": [
+          {
+            "coveredScripts": [
+              "cyrillic",
+              "greek"
+            ],
+            "faceIndex": 0,
+            "familyName": "Noto Sans CJK JP",
+            "fullName": "Noto Sans CJK JP",
+            "isSerif": false,
+            "italic": false,
+            "postscriptName": "NotoSansCJKjp-Regular",
+            "selectionNames": [
+              "Noto Sans CJK JP/Regular"
+            ],
+            "styleName": "Regular",
+            "variationInstances": [],
+            "weight": 400,
+            "width": 5
+          },
+          {
+            "coveredScripts": [
+              "cyrillic",
+              "greek"
+            ],
+            "faceIndex": 1,
+            "familyName": "Noto Sans CJK KR",
+            "fullName": "Noto Sans CJK KR",
+            "isSerif": false,
+            "italic": false,
+            "postscriptName": "NotoSansCJKkr-Regular",
+            "selectionNames": [
+              "Noto Sans CJK KR/Regular"
+            ],
+            "styleName": "Regular",
+            "variatio ...
+$ project checkout --project /home/runner/work/jEhs4_wTJLKz/jEhs4_wTJLKz/project/project.tsrct --output /home/runner/work/jEhs4_wTJLKz/jEhs4_wTJLKz/project/.tesseract-work/editable.json
+{"output":"/home/runner/work/jEhs4_wTJLKz/jEhs4_wTJLKz/project/.tesseract-work/editable.json"}
+document keys: ['$schema', 'formatVersion', 'dimensions', 'colorManagement', 'duration', 'composition']
+dimensions set at 1 places
+composition at doc.composition layers: 0
+$ project commit --project /home/runner/work/jEhs4_wTJLKz/jEhs4_wTJLKz/project/project.tsrct --file /home/runner/work/jEhs4_wTJLKz/jEhs4_wTJLKz/project/.tesseract-work/editable.json
+{"project":"/home/runner/work/jEhs4_wTJLKz/jEhs4_wTJLKz/project/project.tsrct","warnings":[]}
+$ project apply --project /home/runner/work/jEhs4_wTJLKz/jEhs4_wTJLKz/project/project.tsrct --actions /home/runner/work/jEhs4_wTJLKz/jEhs4_wTJLKz/project/.tesseract-work/batches/S1.json
+{"actions":[{"activeRange":{"duration":27146,"start":0},"compositionId":"main","insertIndex":null,"layerId":10,"name":"S1 scene","parentLayerId":null,"pixelsPerMeter":100.0,"renderSettings":{"filmGate":null,"id":1003,"lightCollections":[],"lightGroups":[],"lightLinks":[],"outputs":[],"overscan":null,"previewOutput":null},"transform":{"anchorPoint":[0.0,0.0],"opacity":100.0,"orientation":[0.0,0.0,0.0],"position":[0.0,0.0],"rotation":0.0,"rotationX":0.0,"rotationY":0.0,"scale":[100.0,100.0],"skew":0.0,"skewAxis":0.0},"type":"createFxScene3DLayer","view":{"exposure":0.0,"id":1001},"world":{"id":1002}},{"compositionId":"main","layerId":10,"pruneAnimation":false,"type":"setFxScene3DWorld","world":{"background":{"color":[0.0,0.0,0.0,1.0],"type":"color"},"id":1002,"light":{"integration":"sampled","intensity":0.015,"source":{"color":[0.7,0.8,1.0,1.0],"type":"color"}}}},{"compositionId":"main","data":[{"geometry":{"size":[30000.0,40.0,30000.0],"type":"box"},"id":1004,"name":"Floor geometry","regions":[{"key":"primary","name":"Primary"},{"key":"side","name":"Side"}],"type":"mesh"}],"items":[{"castsShadows":true,"dataId":1004,"id":1005,"isHidden":false,"materialSlots":[{"binding":{"alphaMode" ...
+$ project apply --project /home/runner/work/jEhs4_wTJLKz/jEhs4_wTJLKz/project/project.tsrct --actions /home/runner/work/jEhs4_wTJLKz/jEhs4_wTJLKz/project/.tesseract-work/batches/S2.json
+{"actions":[{"activeRange":{"duration":7000,"start":27146},"compositionId":"main","insertIndex":null,"layerId":11,"name":"S2 scene","parentLayerId":null,"pixelsPerMeter":100.0,"renderSettings":{"filmGate":null,"id":2003,"lightCollections":[],"lightGroups":[],"lightLinks":[],"outputs":[],"overscan":null,"previewOutput":null},"transform":{"anchorPoint":[0.0,0.0],"opacity":100.0,"orientation":[0.0,0.0,0.0],"position":[0.0,0.0],"rotation":0.0,"rotationX":0.0,"rotationY":0.0,"scale":[100.0,100.0],"skew":0.0,"skewAxis":0.0},"type":"createFxScene3DLayer","view":{"exposure":0.0,"id":2001},"world":{"id":2002}},{"compositionId":"main","layerId":11,"pruneAnimation":false,"type":"setFxScene3DWorld","world":{"background":{"color":[0.0,0.0,0.0,1.0],"type":"color"},"id":2002,"light":{"integration":"sampled","intensity":0.02,"source":{"color":[1.0,0.9,0.8,1.0],"type":"color"}}}},{"compositionId":"main","data":[{"geometry":{"size":[30000.0,40.0,30000.0],"type":"box"},"id":2004,"name":"Floor geometry","regions":[{"key":"primary","name":"Primary"},{"key":"side","name":"Side"}],"type":"mesh"}],"items":[{"castsShadows":true,"dataId":2004,"id":2005,"isHidden":false,"materialSlots":[{"binding":{"alphaMod ...
+$ project apply --project /home/runner/work/jEhs4_wTJLKz/jEhs4_wTJLKz/project/project.tsrct --actions /home/runner/work/jEhs4_wTJLKz/jEhs4_wTJLKz/project/.tesseract-work/batches/S3.json
+{"actions":[{"activeRange":{"duration":30816,"start":34146},"compositionId":"main","insertIndex":null,"layerId":12,"name":"S3 scene","parentLayerId":null,"pixelsPerMeter":100.0,"renderSettings":{"filmGate":null,"id":3003,"lightCollections":[],"lightGroups":[],"lightLinks":[],"outputs":[],"overscan":null,"previewOutput":null},"transform":{"anchorPoint":[0.0,0.0],"opacity":100.0,"orientation":[0.0,0.0,0.0],"position":[0.0,0.0],"rotation":0.0,"rotationX":0.0,"rotationY":0.0,"scale":[100.0,100.0],"skew":0.0,"skewAxis":0.0},"type":"createFxScene3DLayer","view":{"exposure":0.0,"id":3001},"world":{"id":3002}},{"compositionId":"main","layerId":12,"pruneAnimation":false,"type":"setFxScene3DWorld","world":{"background":{"color":[0.00784313725490196,0.01176470588235294,0.0392156862745098,1.0],"type":"color"},"id":3002,"light":{"integration":"sampled","intensity":0.02,"source":{"color":[0.5,0.65,1.0,1.0],"type":"color"}}}},{"compositionId":"main","data":[{"geometry":{"size":[60000.0,40.0,60000.0],"type":"box"},"id":3004,"name":"Ground geometry","regions":[{"key":"primary","name":"Primary"},{"key":"side","name":"Side"}],"type":"mesh"}],"items":[{"castsShadows":true,"dataId":3004,"id":3005,"isHi ...
+$ project apply --project /home/runner/work/jEhs4_wTJLKz/jEhs4_wTJLKz/project/project.tsrct --actions /home/runner/work/jEhs4_wTJLKz/jEhs4_wTJLKz/project/.tesseract-work/batches/S4.json
+{"actions":[{"activeRange":{"duration":33528,"start":64962},"compositionId":"main","insertIndex":null,"layerId":13,"name":"S4 scene","parentLayerId":null,"pixelsPerMeter":100.0,"renderSettings":{"filmGate":null,"id":4003,"lightCollections":[],"lightGroups":[],"lightLinks":[],"outputs":[],"overscan":null,"previewOutput":null},"transform":{"anchorPoint":[0.0,0.0],"opacity":100.0,"orientation":[0.0,0.0,0.0],"position":[0.0,0.0],"rotation":0.0,"rotationX":0.0,"rotationY":0.0,"scale":[100.0,100.0],"skew":0.0,"skewAxis":0.0},"type":"createFxScene3DLayer","view":{"exposure":0.0,"id":4001},"world":{"id":4002}},{"compositionId":"main","layerId":13,"pruneAnimation":false,"type":"setFxScene3DWorld","world":{"background":{"color":[0.0,0.0,0.0,1.0],"type":"color"},"id":4002,"light":{"integration":"sampled","intensity":0.03,"source":{"color":[0.6,0.75,1.0,1.0],"type":"color"}}}},{"compositionId":"main","data":[{"geometry":{"size":[30000.0,40.0,30000.0],"type":"box"},"id":4004,"name":"Bench geometry","regions":[{"key":"primary","name":"Primary"},{"key":"side","name":"Side"}],"type":"mesh"}],"items":[{"castsShadows":true,"dataId":4004,"id":4005,"isHidden":false,"materialSlots":[{"binding":{"alphaM ...
+$ project apply --project /home/runner/work/jEhs4_wTJLKz/jEhs4_wTJLKz/project/project.tsrct --actions /home/runner/work/jEhs4_wTJLKz/jEhs4_wTJLKz/project/.tesseract-work/batches/S5.json
+{"actions":[{"activeRange":{"duration":32808,"start":98490},"compositionId":"main","insertIndex":null,"layerId":14,"name":"S5 scene","parentLayerId":null,"pixelsPerMeter":100.0,"renderSettings":{"filmGate":null,"id":5003,"lightCollections":[],"lightGroups":[],"lightLinks":[],"outputs":[],"overscan":null,"previewOutput":null},"transform":{"anchorPoint":[0.0,0.0],"opacity":100.0,"orientation":[0.0,0.0,0.0],"position":[0.0,0.0],"rotation":0.0,"rotationX":0.0,"rotationY":0.0,"scale":[100.0,100.0],"skew":0.0,"skewAxis":0.0},"type":"createFxScene3DLayer","view":{"exposure":0.0,"id":5001},"world":{"id":5002}},{"compositionId":"main","layerId":14,"pruneAnimation":false,"type":"setFxScene3DWorld","world":{"background":{"color":[0.0,0.0,0.0,1.0],"type":"color"},"id":5002,"light":{"integration":"sampled","intensity":0.02,"source":{"color":[1.0,0.95,0.85,1.0],"type":"color"}}}},{"compositionId":"main","data":[{"geometry":{"size":[30000.0,40.0,30000.0],"type":"box"},"id":5004,"name":"Floor geometry","regions":[{"key":"primary","name":"Primary"},{"key":"side","name":"Side"}],"type":"mesh"}],"items":[{"castsShadows":true,"dataId":5004,"id":5005,"isHidden":false,"materialSlots":[{"binding":{"alpha ...
+$ project apply --project /home/runner/work/jEhs4_wTJLKz/jEhs4_wTJLKz/project/project.tsrct --actions /home/runner/work/jEhs4_wTJLKz/jEhs4_wTJLKz/project/.tesseract-work/batches/S6.json
+{"actions":[{"activeRange":{"duration":32928,"start":131298},"compositionId":"main","insertIndex":null,"layerId":15,"name":"S6 scene","parentLayerId":null,"pixelsPerMeter":100.0,"renderSettings":{"filmGate":null,"id":6003,"lightCollections":[],"lightGroups":[],"lightLinks":[],"outputs":[],"overscan":null,"previewOutput":null},"transform":{"anchorPoint":[0.0,0.0],"opacity":100.0,"orientation":[0.0,0.0,0.0],"position":[0.0,0.0],"rotation":0.0,"rotationX":0.0,"rotationY":0.0,"scale":[100.0,100.0],"skew":0.0,"skewAxis":0.0},"type":"createFxScene3DLayer","view":{"exposure":0.0,"id":6001},"world":{"id":6002}},{"compositionId":"main","layerId":15,"pruneAnimation":false,"type":"setFxScene3DWorld","world":{"background":{"color":[0.0,0.0,0.0,1.0],"type":"color"},"id":6002,"light":{"integration":"sampled","intensity":0.03,"source":{"color":[0.6,0.7,1.0,1.0],"type":"color"}}}},{"compositionId":"main","data":[{"geometry":{"size":[30000.0,40.0,30000.0],"type":"box"},"id":6004,"name":"Floor geometry","regions":[{"key":"primary","name":"Primary"},{"key":"side","name":"Side"}],"type":"mesh"}],"items":[{"castsShadows":true,"dataId":6004,"id":6005,"isHidden":false,"materialSlots":[{"binding":{"alphaM ...
+$ project apply --project /home/runner/work/jEhs4_wTJLKz/jEhs4_wTJLKz/project/project.tsrct --actions /home/runner/work/jEhs4_wTJLKz/jEhs4_wTJLKz/project/.tesseract-work/batches/S7.json
+{"actions":[{"activeRange":{"duration":31872,"start":164226},"compositionId":"main","insertIndex":null,"layerId":16,"name":"S7 scene","parentLayerId":null,"pixelsPerMeter":100.0,"renderSettings":{"filmGate":null,"id":7003,"lightCollections":[],"lightGroups":[],"lightLinks":[],"outputs":[],"overscan":null,"previewOutput":null},"transform":{"anchorPoint":[0.0,0.0],"opacity":100.0,"orientation":[0.0,0.0,0.0],"position":[0.0,0.0],"rotation":0.0,"rotationX":0.0,"rotationY":0.0,"scale":[100.0,100.0],"skew":0.0,"skewAxis":0.0},"type":"createFxScene3DLayer","view":{"exposure":0.0,"id":7001},"world":{"id":7002}},{"compositionId":"main","layerId":16,"pruneAnimation":false,"type":"setFxScene3DWorld","world":{"background":{"color":[0.0,0.0,0.0,1.0],"type":"color"},"id":7002,"light":{"integration":"sampled","intensity":0.02,"source":{"color":[1.0,0.6,0.5,1.0],"type":"color"}}}},{"compositionId":"main","data":[{"geometry":{"size":[40000.0,40.0,40000.0],"type":"box"},"id":7004,"name":"Floor geometry","regions":[{"key":"primary","name":"Primary"},{"key":"side","name":"Side"}],"type":"mesh"}],"items":[{"castsShadows":true,"dataId":7004,"id":7005,"isHidden":false,"materialSlots":[{"binding":{"alphaM ...
+$ project apply --project /home/runner/work/jEhs4_wTJLKz/jEhs4_wTJLKz/project/project.tsrct --actions /home/runner/work/jEhs4_wTJLKz/jEhs4_wTJLKz/project/.tesseract-work/batches/S8.json
+{"actions":[{"activeRange":{"duration":30338,"start":196098},"compositionId":"main","insertIndex":null,"layerId":17,"name":"S8 scene","parentLayerId":null,"pixelsPerMeter":100.0,"renderSettings":{"filmGate":null,"id":8003,"lightCollections":[],"lightGroups":[],"lightLinks":[],"outputs":[],"overscan":null,"previewOutput":null},"transform":{"anchorPoint":[0.0,0.0],"opacity":100.0,"orientation":[0.0,0.0,0.0],"position":[0.0,0.0],"rotation":0.0,"rotationX":0.0,"rotationY":0.0,"scale":[100.0,100.0],"skew":0.0,"skewAxis":0.0},"type":"createFxScene3DLayer","view":{"exposure":0.0,"id":8001},"world":{"id":8002}},{"compositionId":"main","layerId":17,"pruneAnimation":false,"type":"setFxScene3DWorld","world":{"background":{"color":[0.0,0.0,0.0,1.0],"type":"color"},"id":8002,"light":{"integration":"sampled","intensity":0.015,"source":{"color":[0.6,0.8,1.0,1.0],"type":"color"}}}},{"compositionId":"main","data":[{"geometry":{"size":[60000.0,40.0,60000.0],"type":"box"},"id":8004,"name":"Floor geometry","regions":[{"key":"primary","name":"Primary"},{"key":"side","name":"Side"}],"type":"mesh"}],"items":[{"castsShadows":true,"dataId":8004,"id":8005,"isHidden":false,"materialSlots":[{"binding":{"alpha ...
+$ project apply --project /home/runner/work/jEhs4_wTJLKz/jEhs4_wTJLKz/project/project.tsrct --actions /home/runner/work/jEhs4_wTJLKz/jEhs4_wTJLKz/project/.tesseract-work/batches/overlays.json
+{"actions":[{"activeRange":{"duration":23346,"start":3000},"compositionId":"main","insertIndex":0,"layerId":100,"name":"2025.01.27","parentLayerId":null,"sourceText":{"allCaps":false,"baselineShift":0.0,"boxText":false,"fillColor":[0.6039215686274509,0.6392156862745098,0.6980392156862745,1.0],"fillEnabled":true,"fontFamily":"Noto Sans CJK SC","fontSize":44.0,"fontStyle":"Regular","justification":"left","strokeEnabled":false,"strokeOverFill":false,"strokeWidth":0.0,"text":"2025.01.27","tracking":120.0},"transform":{"anchorPoint":[0.0,0.0],"opacity":100.0,"orientation":[0.0,0.0,0.0],"position":[120.0,950.0],"rotation":0.0,"rotationX":0.0,"rotationY":0.0,"scale":[100.0,100.0],"skew":0.0,"skewAxis":0.0},"type":"createFxTextLayer"},{"compositionId":"main","keyframes":[{"easing":{"type":"linear"},"id":"ov1-a","layerTime":0,"value":{"type":"float","value":0.0}},{"easing":{"type":"cubicBezier","x1":0.1,"x2":0.3,"y1":0.5,"y2":1.0},"id":"ov1-b","layerTime":400,"value":{"type":"float","value":100.0}},{"easing":{"type":"linear"},"id":"ov1-c","layerTime":22946,"value":{"type":"float","value":100.0}},{"easing":{"type":"cubicBezier","x1":0.6,"x2":0.9,"y1":0.0,"y2":0.4},"id":"ov1-d","layerTime":23 ...
+$ project import-asset --project /home/runner/work/jEhs4_wTJLKz/jEhs4_wTJLKz/project/project.tsrct --file /home/runner/work/jEhs4_wTJLKz/jEhs4_wTJLKz/project/narration/narration.wav --asset-id narration --kind audio
+{"assetId":"narration","kind":"audio","project":"/home/runner/work/jEhs4_wTJLKz/jEhs4_wTJLKz/project/project.tsrct"}
+$ project checkout --project /home/runner/work/jEhs4_wTJLKz/jEhs4_wTJLKz/project/project.tsrct --output /home/runner/work/jEhs4_wTJLKz/jEhs4_wTJLKz/project/.tesseract-work/editable.json
+{"output":"/home/runner/work/jEhs4_wTJLKz/jEhs4_wTJLKz/project/.tesseract-work/editable.json"}
+$ project commit --project /home/runner/work/jEhs4_wTJLKz/jEhs4_wTJLKz/project/project.tsrct --file /home/runner/work/jEhs4_wTJLKz/jEhs4_wTJLKz/project/.tesseract-work/editable.json
+{"project":"/home/runner/work/jEhs4_wTJLKz/jEhs4_wTJLKz/project/project.tsrct","warnings":[]}
+audio layer: ok
+$ project inspect --project /home/runner/work/jEhs4_wTJLKz/jEhs4_wTJLKz/project/project.tsrct --pretty
+{
+  "$schema": "https://jerboa.dev/schemas/fx-composition/editable/v1/document.schema.json",
+  "backgroundColor": [
+    0.0,
+    0.0,
+    0.0,
+    1.0
+  ],
+  "colorManagement": {
+    "workingSpace": "legacyDisplay"
+  },
+  "composition": {
+    "dynamics": {
+      "entries": [
+        {
+          "animator": {
+            "enabled": true,
+            "keyframes": [
+              {
+                "easing": {
+                  "type": "linear"
+                },
+                "id": "S1-1020-position-0",
+                "layerTime": 0,
+                "value": {
+                  "type": "vector3",
+                  "value": [
+                    0.0,
+                    -700.0,
+                    -7600.0
+                  ]
+                }
+              },
+              {
+                "easing": {
+                  "type": "linear"
+                },
+                "id": "S1-1020-position-1",
+                "layerTime": 27146,
+                "value": {
+                  "type": "vector3",
+                  "value": [
+                    120.0,
+                    -260.0,
+                    -4200.0
+                  ]
+                }
+              }
+            ],
+         ...
+document size: 59991 KB
+$ filmstrip --project /home/runner/work/jEhs4_wTJLKz/jEhs4_wTJLKz/project/project.tsrct --timestamps-ms 0,5429,10858,16287,21716,27106 --frame-rate 30 --items-per-row 3 --tile-width 640 --tile-height 360 --samples 4 --output /home/runner/work/jEhs4_wTJLKz/jEhs4_wTJLKz/project/Previews/S1.png
+[ERROR renderer::backend::numeric_status] Invalid radiance frame 1: invalid input
+Error: Render failed: Invalid radiance in frame 1: numeric flags 0x1 (bits: input=1, add=2, mul=4, domain=8, div=16; other bits=unknown): Invalid radiance in frame 1: numeric flags 0x1 (bits: input=1, add=2, mul=4, domain=8, div=16; other bits=unknown): Invalid radiance in frame 1: numeric flags 0x1 (bits: input=1, add=2, mul=4, domain=8, div=16; other bits=unknown)
+$ filmstrip --project /home/runner/work/jEhs4_wTJLKz/jEhs4_wTJLKz/project/project.tsrct --timestamps-ms 27146,28546,29946,31346,32746,34106 --frame-rate 30 --items-per-row 3 --tile-width 640 --tile-height 360 --samples 4 --output /home/runner/work/jEhs4_wTJLKz/jEhs4_wTJLKz/project/Previews/S2.png
+[ERROR renderer::backend::numeric_status] Invalid radiance frame 1: invalid input
+Error: Render failed: Invalid radiance in frame 1: numeric flags 0x1 (bits: input=1, add=2, mul=4, domain=8, div=16; other bits=unknown): Invalid radiance in frame 1: numeric flags 0x1 (bits: input=1, add=2, mul=4, domain=8, div=16; other bits=unknown): Invalid radiance in frame 1: numeric flags 0x1 (bits: input=1, add=2, mul=4, domain=8, div=16; other bits=unknown)
+$ filmstrip --project /home/runner/work/jEhs4_wTJLKz/jEhs4_wTJLKz/project/project.tsrct --timestamps-ms 34146,40309,46472,52635,58798,64922 --frame-rate 30 --items-per-row 3 --tile-width 640 --tile-height 360 --samples 4 --output /home/runner/work/jEhs4_wTJLKz/jEhs4_wTJLKz/project/Previews/S3.png
+[ERROR renderer::backend::numeric_status] Invalid radiance frame 1: invalid input
+Error: Render failed: Invalid radiance in frame 1: numeric flags 0x1 (bits: input=1, add=2, mul=4, domain=8, div=16; other bits=unknown): Invalid radiance in frame 1: numeric flags 0x1 (bits: input=1, add=2, mul=4, domain=8, div=16; other bits=unknown): Invalid radiance in frame 1: numeric flags 0x1 (bits: input=1, add=2, mul=4, domain=8, div=16; other bits=unknown)
+$ filmstrip --project /home/runner/work/jEhs4_wTJLKz/jEhs4_wTJLKz/project/project.tsrct --timestamps-ms 64962,71667,78373,85078,91784,98450 --frame-rate 30 --items-per-row 3 --tile-width 640 --tile-height 360 --samples 4 --output /home/runner/work/jEhs4_wTJLKz/jEhs4_wTJLKz/project/Previews/S4.png
+[ERROR renderer::backend::numeric_status] Invalid radiance frame 1: invalid input
+Error: Render failed: Invalid radiance in frame 1: numeric flags 0x1 (bits: input=1, add=2, mul=4, domain=8, div=16; other bits=unknown): Invalid radiance in frame 1: numeric flags 0x1 (bits: input=1, add=2, mul=4, domain=8, div=16; other bits=unknown): Invalid radiance in frame 1: numeric flags 0x1 (bits: input=1, add=2, mul=4, domain=8, div=16; other bits=unknown)
+$ filmstrip --project /home/runner/work/jEhs4_wTJLKz/jEhs4_wTJLKz/project/project.tsrct --timestamps-ms 98490,105051,111613,118174,124736,131258 --frame-rate 30 --items-per-row 3 --tile-width 640 --tile-height 360 --samples 4 --output /home/runner/work/jEhs4_wTJLKz/jEhs4_wTJLKz/project/Previews/S5.png
+[ERROR renderer::backend::numeric_status] Invalid radiance frame 1: invalid input
+Error: Render failed: Invalid radiance in frame 1: numeric flags 0x1 (bits: input=1, add=2, mul=4, domain=8, div=16; other bits=unknown): Invalid radiance in frame 1: numeric flags 0x1 (bits: input=1, add=2, mul=4, domain=8, div=16; other bits=unknown): Invalid radiance in frame 1: numeric flags 0x1 (bits: input=1, add=2, mul=4, domain=8, div=16; other bits=unknown)
+$ filmstrip --project /home/runner/work/jEhs4_wTJLKz/jEhs4_wTJLKz/project/project.tsrct --timestamps-ms 131298,137883,144469,151054,157640,164186 --frame-rate 30 --items-per-row 3 --tile-width 640 --tile-height 360 --samples 4 --output /home/runner/work/jEhs4_wTJLKz/jEhs4_wTJLKz/project/Previews/S6.png
+[ERROR renderer::backend::numeric_status] Invalid radiance frame 1: invalid input
+Error: Render failed: Invalid radiance in frame 1: numeric flags 0x1 (bits: input=1, add=2, mul=4, domain=8, div=16; other bits=unknown): Invalid radiance in frame 1: numeric flags 0x1 (bits: input=1, add=2, mul=4, domain=8, div=16; other bits=unknown): Invalid radiance in frame 1: numeric flags 0x1 (bits: input=1, add=2, mul=4, domain=8, div=16; other bits=unknown)
+$ filmstrip --project /home/runner/work/jEhs4_wTJLKz/jEhs4_wTJLKz/project/project.tsrct --timestamps-ms 164226,170600,176974,183349,189723,196058 --frame-rate 30 --items-per-row 3 --tile-width 640 --tile-height 360 --samples 4 --output /home/runner/work/jEhs4_wTJLKz/jEhs4_wTJLKz/project/Previews/S7.png
+[ERROR renderer::backend::numeric_status] Invalid radiance frame 1: invalid input
+Error: Render failed: Invalid radiance in frame 1: numeric flags 0x1 (bits: input=1, add=2, mul=4, domain=8, div=16; other bits=unknown): Invalid radiance in frame 1: numeric flags 0x1 (bits: input=1, add=2, mul=4, domain=8, div=16; other bits=unknown): Invalid radiance in frame 1: numeric flags 0x1 (bits: input=1, add=2, mul=4, domain=8, div=16; other bits=unknown)
+$ filmstrip --project /home/runner/work/jEhs4_wTJLKz/jEhs4_wTJLKz/project/project.tsrct --timestamps-ms 196098,202165,208233,214300,220368,226396 --frame-rate 30 --items-per-row 3 --tile-width 640 --tile-height 360 --samples 4 --output /home/runner/work/jEhs4_wTJLKz/jEhs4_wTJLKz/project/Previews/S8.png
+[ERROR renderer::backend::numeric_status] Invalid radiance frame 1: invalid input
+Error: Render failed: Invalid radiance in frame 1: numeric flags 0x1 (bits: input=1, add=2, mul=4, domain=8, div=16; other bits=unknown): Invalid radiance in frame 1: numeric flags 0x1 (bits: input=1, add=2, mul=4, domain=8, div=16; other bits=unknown): Invalid radiance in frame 1: numeric flags 0x1 (bits: input=1, add=2, mul=4, domain=8, div=16; other bits=unknown)
+$ evaluate --project /home/runner/work/jEhs4_wTJLKz/jEhs4_wTJLKz/project/project.tsrct --checks scene3d.framing,fx.text-fit,fx.text-overlap --start-ms 0 --duration-ms 226436 --fps 1
+{"approximate":true,"check":"scene3d.framing","kind":"margin","measured":0.010951989697903005,"message":"item 3011 is 1.1% of the frame from an edge, inside the 5.0% margin","samples":1,"severity":"info","target":{"composition":"main","item":3011,"kind":"scene3dItem","layer":12,"layerOccurrence":0,"occurrence":0},"threshold":0.05,"timeRangeMs":[44000.0,44000.0],"type":"issue","unit":"fraction","worstAtMs":44000.0}
+{"approximate":true,"check":"scene3d.framing","kind":"margin","measured":0.008753429168834575,"message":"item 3011 is 0.9% of the frame from an edge, inside the 5.0% margin","samples":1,"severity":"info","target":{"composition":"main","item":3011,"kind":"scene3dItem","layer":12,"layerOccurrence":0,"occurrence":1},"threshold":0.05,"timeRangeMs":[44000.0,44000.0],"type":"issue","unit":"fraction","worstAtMs":44000.0}
+{"approximate":true,"check":"scene3d.framing","kind":"margin","measured":0.006548891544165961,"message":"item 3011 is 0.7% of the frame from an edge, inside the 5.0% margin","samples":1,"severity":"info","target":{"composition":"main","item":3011,"kind":"scene3dItem","layer":12,"layerOccurrence":0,"occurrence":2},"threshold":0.05,"timeRangeMs":[44000.0,44000.0], ...
+build done: /home/runner/work/jEhs4_wTJLKz/jEhs4_wTJLKz/project/project.tsrct

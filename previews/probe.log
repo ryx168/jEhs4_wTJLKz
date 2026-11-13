@@ -1,0 +1,8 @@
+$ --duration-ms 1000 --resolution 1080p --samples 4 --output project/.tesseract-work/probe-raster4.mp4
+  wall 178.51s
+$ --duration-ms 200 --resolution 1080p --renderer path-tracer --samples 32 --no-denoise --output project/.tesseract-work/probe-pt32nd.mp4
+export: complete — elapsed 1515.0s
+  wall 1515.25s
+$ --duration-ms 100 --resolution 1080p --renderer path-tracer --samples 32 --output project/.tesseract-work/probe-pt32.mp4
+export: complete — elapsed 1089.2s
+  wall 1089.39s
