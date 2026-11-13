@@ -1,4 +1,4 @@
-name: bisect
+﻿name: bisect
 on:
   workflow_dispatch:
     inputs:
@@ -18,7 +18,7 @@ jobs:
       - name: Bisect
         run: |
           mkdir -p project/.tesseract-work
-          ONLY="${{ github.event.inputs.only }}" python3 pipeline/bisect.py 2>&1 | tee project/.tesseract-work/bisect.log
+          ONLY="${{ github.event.inputs.only }}" python3 pipeline/find_nan.py 2>&1 | tee project/.tesseract-work/bisect.log
       - uses: actions/upload-artifact@v4
         with:
           name: bisect
