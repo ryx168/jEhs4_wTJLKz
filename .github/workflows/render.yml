@@ -1,0 +1,188 @@
+name: render
+# push   -> TTS + build the project, raster filmstrips + a timing probe, committed back to previews/
+# manual -> same build, then a chunked export with the chosen renderer, stitched + narration, published as a Release
+on:
+  workflow_dispatch:
+    inputs:
+      renderer:
+        description: raster | path-tracer
+        default: raster
+      samples:
+        description: samples per pixel (raster film/lens samples, or path-tracer samples)
+        default: "4"
+      denoise:
+        description: path-tracer denoiser (slow on CPU) yes | no
+        default: "no"
+      chunks:
+        description: parallel export chunks
+        default: "20"
+      resolution:
+        description: 720p | 1080p | 4k
+        default: 1080p
+      fps:
+        default: "30"
+  push:
+    paths:
+      - "pipeline/**"
+      - "script/**"
+      - ".github/workflows/render.yml"
+permissions:
+  contents: write
+concurrency:
+  group: render-${{ github.ref }}
+  cancel-in-progress: true
+env:
+  TSRCT_VERSION: "0.6.0"
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    outputs:
+      total_ms: ${{ steps.build.outputs.total_ms }}
+      chunks: ${{ steps.plan.outputs.chunks }}
+      matrix: ${{ steps.plan.outputs.matrix }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Tesseract CLI
+        run: bash pipeline/install-tsrct.sh
+      - name: Narration (edge-tts placeholder unless real recordings are present)
+        run: |
+          pip install -q edge-tts
+          python3 pipeline/tts.py
+      - name: Build the project
+        id: build
+        run: |
+          set -o pipefail
+          export TESSERACT_SKILL=tesseract-3d
+          mkdir -p project/.tesseract-work
+          python3 pipeline/build.py 2>&1 | tee project/.tesseract-work/build.log
+          total=$(python3 -c "import json;print(int(round(json.load(open('script/script_timed.json'))['total']*1000)))")
+          echo "total_ms=$total" >> "$GITHUB_OUTPUT"
+          ls -la project project/Previews
+      - name: Timing probe (per-frame cost of each renderer on this scene)
+        if: github.event_name == 'push'
+        run: |
+          set +e
+          p=project/.tesseract-work/probe.log
+          s4=$(python3 -c "import json;s=json.load(open('script/script_timed.json'))['scenes'];print(int([x for x in s if x['id']=='S4'][0]['start']*1000)+6000)")
+          probe() { echo; echo "\$ $*" | tee -a $p; /usr/bin/time -f "  wall %es" "$TS" export --project project/project.tsrct --start-ms $s4 "$@" --encoder-backend external-ffmpeg-command --ffmpeg-path "$FFMPEG" 2>&1 | grep -E "complete|wall|error|Error" | tee -a $p; }
+          probe --duration-ms 1000 --resolution 1080p --samples 4 --output project/.tesseract-work/probe-raster4.mp4
+          probe --duration-ms 200 --resolution 1080p --renderer path-tracer --samples 32 --no-denoise --output project/.tesseract-work/probe-pt32nd.mp4
+          probe --duration-ms 100 --resolution 1080p --renderer path-tracer --samples 32 --output project/.tesseract-work/probe-pt32.mp4
+          cat $p
+      - name: Plan chunks
+        id: plan
+        run: |
+          n="${{ github.event.inputs.chunks || '20' }}"
+          echo "chunks=$n" >> "$GITHUB_OUTPUT"
+          echo "matrix=$(python3 -c "import json;print(json.dumps(list(range(int('$n')))))")" >> "$GITHUB_OUTPUT"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: project
+          path: |
+            project/project.tsrct
+            project/narration/narration.wav
+            project/Previews
+            project/.tesseract-work/*.log
+            project/.tesseract-work/*.mp4
+            project/.tesseract-work/checks.jsonl
+            project/.tesseract-work/batches
+            project/.tesseract-work/document.schema.json
+            script/script_timed.json
+          retention-days: 14
+      - name: Commit previews + logs back
+        if: github.event_name == 'push'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          mkdir -p previews
+          rm -f previews/*
+          cp project/Previews/*.png previews/ 2>/dev/null || true
+          cp project/.tesseract-work/build.log previews/build.log
+          cp project/.tesseract-work/probe.log previews/probe.log 2>/dev/null || true
+          cp project/.tesseract-work/checks.jsonl previews/checks.jsonl 2>/dev/null || true
+          cp project/.tesseract-work/document.schema.json previews/document.schema.json 2>/dev/null || true
+          cp script/script_timed.json previews/script_timed.json
+          git add previews
+          git commit -m "previews: run ${{ github.run_number }} [skip ci]" || echo "nothing to commit"
+          git pull --rebase -q || true
+          git push
+
+  render:
+    if: github.event_name == 'workflow_dispatch'
+    needs: build
+    runs-on: ubuntu-24.04
+    timeout-minutes: 355
+    strategy:
+      fail-fast: false
+      max-parallel: 20
+      matrix:
+        chunk: ${{ fromJson(needs.build.outputs.matrix) }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Tesseract CLI
+        run: bash pipeline/install-tsrct.sh
+      - uses: actions/download-artifact@v4
+        with:
+          name: project
+          path: in
+      - name: Export chunk ${{ matrix.chunk }}
+        run: |
+          total=${{ needs.build.outputs.total_ms }}
+          n=${{ needs.build.outputs.chunks }}
+          fps=${{ github.event.inputs.fps || '30' }}
+          c=${{ matrix.chunk }}
+          # whole-frame boundaries so the pieces butt together
+          frames=$(( total * fps / 1000 ))
+          f0=$(( frames * c / n ))
+          f1=$(( frames * (c + 1) / n ))
+          [ $c -eq $((n - 1)) ] && f1=$frames
+          echo "chunk $c: frames $f0..$f1 of $frames"
+          mkdir -p out
+          args=(--project in/project/project.tsrct --start-frame $f0 --frame-count $((f1 - f0)) --fps $fps
+                --resolution ${{ github.event.inputs.resolution || '1080p' }}
+                --samples ${{ github.event.inputs.samples || '4' }}
+                --encoder-backend external-ffmpeg-command --ffmpeg-path "$FFMPEG" --json
+                --output out/chunk-$(printf '%03d' $c).mp4)
+          if [ "${{ github.event.inputs.renderer || 'raster' }}" = "path-tracer" ]; then
+            args+=(--renderer path-tracer)
+            [ "${{ github.event.inputs.denoise || 'no' }}" = "yes" ] || args+=(--no-denoise)
+          fi
+          export TESSERACT_SKILL=tesseract-3d
+          "$TS" export "${args[@]}" 2> out/export-$c.log
+          tail -2 out/export-$c.log
+          ffprobe -v error -show_entries format=duration -of csv=p=0 out/chunk-*.mp4
+      - uses: actions/upload-artifact@v4
+        with:
+          name: chunk-${{ matrix.chunk }}
+          path: out
+          retention-days: 7
+
+  stitch:
+    if: github.event_name == 'workflow_dispatch'
+    needs: [build, render]
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          path: in
+      - name: Concat + mux narration
+        run: |
+          sudo apt-get install -y -qq ffmpeg >/dev/null
+          ls in/chunk-*/chunk-*.mp4 | sort > list.txt
+          sed "s/^/file '/;s/$/'/" list.txt > concat.txt
+          cat concat.txt
+          ffmpeg -v error -f concat -safe 0 -i concat.txt -c copy video.mp4
+          ffmpeg -v error -i video.mp4 -i in/project/project/narration/narration.wav -map 0:v -map 1:a -c:v copy -c:a aac -b:a 192k -shortest deepseek_crash_day.mp4
+          ffprobe -v error -show_entries format=duration:stream=codec_name,width,height,r_frame_rate -of compact deepseek_crash_day.mp4
+          nb=$(ffprobe -v error -count_frames -select_streams v -show_entries stream=nb_read_frames -of csv=p=0 deepseek_crash_day.mp4)
+          ffmpeg -v error -i deepseek_crash_day.mp4 -vf "select='not(mod(n\,$(( nb / 24 + 1 ))))',scale=480:-1,tile=4x6" -frames:v 1 contact_sheet.png
+      - name: Release
+        run: |
+          tag="run-${{ github.run_number }}"
+          gh release create "$tag" deepseek_crash_day.mp4 contact_sheet.png \
+            -t "DeepSeek 冲击日 — ${{ github.event.inputs.renderer }} ${{ github.event.inputs.resolution }} (run ${{ github.run_number }})" \
+            -n "renderer=${{ github.event.inputs.renderer }} samples=${{ github.event.inputs.samples }} denoise=${{ github.event.inputs.denoise }} chunks=${{ github.event.inputs.chunks }} fps=${{ github.event.inputs.fps }}"
+        env:
+          GH_TOKEN: ${{ github.token }}
