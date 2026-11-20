@@ -213,13 +213,16 @@ class Scene:
                        "transform": tf3(pos, rot, scale)}]})
         return gid
 
-    def card(self, photo, pos, rot=None, w=640, h=400, name="Card", parent=None):
-        """A tour photo on an unlit plane in a thin gold frame. Returns the card group id."""
+    def card(self, photo, pos, rot=None, w=640, h=400, name="Card", parent=None, back=None):
+        """A tour photo on an unlit plane in a thin gold frame; `back` puts a photo on the reverse too."""
         g = self.group(pos, rot, name=name, parent=parent)
         self.mesh({"type": "box", "size": [w + 24, h + 24, 8]}, (0, 0, 8), GOLD, parent=g, name=name + " frame")
         self.mesh({"type": "plane", "size": [w, h]}, (0, 0, 0),
                   dict(base="#ffffff", rough=0.6, unlit=True, tex=photo, double=True), parent=g, name=name + " photo",
                   shadows=False)
+        if back:
+            self.mesh({"type": "plane", "size": [w, h]}, (0, 0, 16), dict(base="#ffffff", rough=0.6, unlit=True, tex=back,
+                      double=True), rot=(0, 180, 0), parent=g, name=name + " back", shadows=False)
         return g
 
     def anim(self, item, prop, keys, kind="float"):
@@ -327,7 +330,7 @@ def scene_S1():
     s.path(cam, [(0, -60, -1400), (0, -90, 3200), (0, -120, 7600)], 0, s.dur, LIN)
     s.fade(250, 500, start=-3)
     a = SCENES["S1"]["start"] + 0.25
-    centered("32 年，帶華人看世界", 400, a, sc_end("S1", 0.2), size=104, font=FONT_SERIF or FONT, stroke=("#0a1420", 3))
+    centered("32 年，帶華人看世界", 400, a, sc_end("S1", 0.2), size=104, font=FONT_SERIF or FONT, stroke=("#0a1420", 5))
     centered("新聯華假期  XO TOURS  ·  1994 – 2026", 560, a + 0.6, sc_end("S1", 0.2), size=40, color="#f0d79a", tracking=60)
     return s
 
@@ -335,19 +338,19 @@ def scene_S2():
     """1994, Vancouver: one coin on a table - the tip that started a company."""
     s = Scene("S2", 11, 2000)
     s.world("#040304", 0.02, (1, 0.9, 0.8))
-    s.mesh({"type": "box", "size": [8000, 60, 6000]}, (0, 30, 1000), dict(base="#4a2f1c", rough=0.42), name="Table")
-    coin, coinb = s.mesh({"type": "cylinder", "radius": 70, "height": 9}, (0, -70, 0),
-                         dict(GOLD, emissive="#ffcf6b", estrength=0.0), rot=(90, 0, 0), name="Coin")
+    s.mesh({"type": "box", "size": [8000, 60, 6000]}, (0, 30, 1000), dict(base="#2e1d12", rough=0.35), name="Table")
+    coin, coinb = s.mesh({"type": "cylinder", "radius": 70, "height": 14}, (0, -70, 0),
+                         dict(GOLD, rough=0.18, emissive="#ffcf6b", estrength=0.0), rot=(90, 0, 0), name="Coin")
     s.anim(coin, "rotationY", [(0, -30, LIN), (s.dur, 330, LIN)])
     t_kind = s.at("s2b", 0.2)
     s.anim(coinb, "emissiveStrength", [(0, 0, LIN), (t_kind, 0, LIN), (t_kind + 2500, 2.5, EASE_OUT)])
-    s.text3d("1994", (0, -360, 2000), size=640, depth=80, mat=dict(base=TEAL, rough=0.35, metal=0.6),
+    s.text3d("1994", (0, -170, 2600), size=520, depth=80, mat=dict(base=TEAL, rough=0.35, metal=0.6),
              side_mat=dict(base="#1d4a52", rough=0.4, metal=0.6), bevel=6, name="1994", font=FONT_SERIF or FONT)
-    key = s.light("spot", pos=(300, -1600, -500), aim=(0, -70, 0), power=30000, color=(1, 0.82, 0.6), coneAngle=26, coneFeather=0.6)
-    s.anim(key, "power", [(0, 30000, LIN), (t_kind, 30000, LIN), (t_kind + 2500, 70000, EASE)])
-    s.light("area", pos=(-2400, -2200, 3200), aim=(0, -300, 2000), power=90000, color=(0.6, 0.8, 1), areaSize=[1500, 1500])
-    cam = s.camera((-160, -95, -520), (0, -80, 0), focal=50)
-    s.path(cam, [(-160, -95, -520), (-40, -220, -1300), (120, -380, -2300)], 0, s.dur, SMOOTH)
+    key = s.light("spot", pos=(300, -1600, -500), aim=(0, -70, 0), power=7000, color=(1, 0.82, 0.6), coneAngle=26, coneFeather=0.7)
+    s.anim(key, "power", [(0, 7000, LIN), (t_kind, 7000, LIN), (t_kind + 2500, 15000, EASE)])
+    s.light("spot", pos=(-1800, -1400, 600), aim=(0, -300, 2600), power=40000, color=(0.55, 0.8, 1), coneAngle=30, coneFeather=0.6)
+    cam = s.camera((-160, -95, -520), (0, -110, 0), focal=50)
+    s.path(cam, [(-160, -95, -520), (-40, -160, -1300), (100, -230, -2200)], 0, s.dur, SMOOTH)
     s.fade(900, 700)
     a, b = win("s2a", 0.1, 1.0)
     text2d("1994  ·  溫哥華  Vancouver", 120, 930, a, b, size=48, color="#f0d79a", tracking=40)
@@ -359,7 +362,7 @@ def scene_S3():
     """新聯華 = 心中有蓮花: a lotus opens on dark water and lights from within."""
     s = Scene("S3", 12, 3000)
     s.world("#03080c", 0.03, (0.6, 0.85, 1))
-    s.mesh({"type": "box", "size": [40000, 20, 40000]}, (0, 12, 0), dict(base="#0a2a33", rough=0.05), name="Water")
+    s.mesh({"type": "box", "size": [40000, 20, 40000]}, (0, 12, 0), dict(base="#04141a", rough=0.06), name="Water")
     for x, z, r in ((-700, 300, 260), (650, 500, 220), (-300, 1200, 300), (900, -350, 180)):
         s.mesh({"type": "cylinder", "radius": r, "height": 6}, (x, -1, z), dict(base="#2f6b4a", rough=0.55), name="Pad")
     t_open = s.at("s3a", 0.0)
@@ -381,7 +384,7 @@ def scene_S3():
     glow = s.light("point", pos=(0, -120, 0), power=10, color=(1, 0.8, 0.5), sourceRadius=20)
     s.anim(glow, "power", [(0, 10, LIN), (t_open + 800, 10, LIN), (t_full + 600, 9000, EASE_OUT)])
     s.light("area", pos=(-1200, -1800, -1400), aim=(0, -60, 0), power=70000, color=(1, 0.88, 0.8), areaSize=[1200, 1200])
-    s.light("spot", pos=(900, -900, 1600), aim=(0, -80, 0), power=50000, color=(0.5, 0.85, 1), coneAngle=35, coneFeather=0.5)
+    s.light("spot", pos=(900, -900, 1600), aim=(0, -80, 0), power=9000, color=(0.5, 0.85, 1), coneAngle=35, coneFeather=0.5)
     cam = s.camera((-300, -520, -1500), (0, -90, 0), focal=40)
     s.path(cam, [(-300, -520, -1500), (300, -420, -1250), (700, -330, -900), (620, -280, -700)], 0, s.dur, LIN)
     s.fade(900, 800)
@@ -404,7 +407,7 @@ def scene_S4():
     s = Scene("S4", 13, 4000)
     s.world("#02050b", 0.04, (0.6, 0.75, 1))
     R = 800
-    s.mesh({"type": "sphere", "radius": R}, (0, 0, 0), dict(base="#0e2846", rough=0.4, metal=0.15), name="Globe")
+    s.mesh({"type": "sphere", "radius": R}, (0, 0, 0), dict(base="#0e2846", rough=0.62, metal=0.05), name="Globe")
     line = dict(base="#000000", rough=0.5, emissive="#d9b25a", estrength=1.3)
     for lat in (-60, -30, 0, 30, 60):
         s.mesh({"type": "torus", "radius": R * math.cos(math.radians(lat)) + 2, "tubeRadius": 2.2},
@@ -435,8 +438,8 @@ def scene_S4():
             s.anim(did, "scale", [(0, (1, 1, 1), LIN), (tk, (1, 1, 1), LIN), (tk + 250, (100, 100, 100), EASE_OUT)], "vector3")
         cid, _ = s.mesh({"type": "sphere", "radius": 16}, latlon(la, lo, R + 6), pin, scale=(1, 1, 1), name=name)
         s.anim(cid, "scale", [(0, (1, 1, 1), LIN), (t_arrive, (1, 1, 1), LIN), (t_arrive + 350, (130, 130, 130), EASE_OUT)], "vector3")
-    s.light("area", pos=(-3000, -2500, -2500), aim=(0, 0, 0), power=160000, color=(1, 0.92, 0.82), areaSize=[1500, 1500])
-    s.light("area", pos=(2500, 1200, 2500), aim=(0, 0, 0), power=90000, color=(0.4, 0.6, 1), areaSize=[1500, 1500])
+    s.light("area", pos=(-3000, -2500, -2500), aim=(0, 0, 0), power=70000, color=(1, 0.92, 0.82), areaSize=[2500, 2500])
+    s.light("area", pos=(2500, 1200, 2500), aim=(0, 0, 0), power=40000, color=(0.4, 0.6, 1), areaSize=[1500, 1500])
     # orbit: North America -> over the Pacific -> East Asia
     D = 2700
     v0, v1 = unit(latlon(42, -100, 1)), unit(latlon(32, 128, 1))
@@ -467,7 +470,8 @@ def scene_S5():
     for k, p in enumerate(ph):
         th = k * 360 / len(ph)
         r = math.radians(th)
-        s.card(p, (R * math.sin(r), -330, -R * math.cos(r)), rot=(0, -th, 0), name=f"Card {p}")
+        s.card(p, (R * math.sin(r), -330, -R * math.cos(r)), rot=(0, -th, 0), name=f"Card {p}",
+               back=ph[(k + 4) % len(ph)])
     core, coreb = s.mesh({"type": "sphere", "radius": 140}, (0, -330, 0), dict(GOLD, emissive="#ffd27a", estrength=0.6), name="Core")
     t_slogan = s.at("s5b", 0.0)
     s.anim(coreb, "emissiveStrength", [(0, 0.6, LIN), (t_slogan, 0.6, LIN), (t_slogan + 2000, 5, EASE_OUT)])
@@ -476,14 +480,14 @@ def scene_S5():
     D, Y = 3400, -620
     pts = [(D * math.sin(math.radians(a)), Y + 140 * math.sin(math.radians(a * 2)), -D * math.cos(math.radians(a)))
            for a in range(-20, 200, 20)]
-    cam = s.camera(pts[0], (0, -330, 0), focal=30)
+    cam = s.camera(pts[0], (0, -620, 0), focal=30)
     s.path(cam, pts, 0, s.dur, LIN)
     s.fade(800, 800)
     a, b = win("s5a", 0.1, 0.9)
     centered("郵輪  ·  歐洲  ·  北歐  ·  地中海  ·  絲綢之路", 930, a, b, size=46, color="#ffffff", tracking=20)
     a, b = win("s5b", 0.1, 1.6)
-    centered("專業  ─  世界通", 380, a, b, size=84, font=FONT_SERIF or FONT, color="#f6dc9a", stroke=("#0a1420", 3))
-    centered("服務  ─  通世界", 500, a + 1.6, b, size=84, font=FONT_SERIF or FONT, color="#f6dc9a", stroke=("#0a1420", 3))
+    centered("專業  ─  世界通", 90, a, b, size=84, font=FONT_SERIF or FONT, color="#f6dc9a", stroke=("#0a1420", 3))
+    centered("服務  ─  通世界", 200, a + 1.6, b, size=84, font=FONT_SERIF or FONT, color="#f6dc9a", stroke=("#0a1420", 3))
     return s
 
 def scene_S6():
@@ -495,15 +499,19 @@ def scene_S6():
                          dict(GOLD, emissive="#ffcf70", estrength=0.0), rot=(90, 0, 0), name="Bridge")
     t_a = s.at("s6a", 0.0)
     s.anim(archb, "emissiveStrength", [(0, 0, LIN), (t_a, 0, LIN), (t_a + 2600, 3.5, EASE_OUT)])
-    sun = s.light("area", pos=(0, -500, 6000), aim=(0, -300, 0), power=40000, color=(1, 0.72, 0.45), areaSize=[3000, 800])
-    s.anim(sun, "power", [(0, 40000, LIN), (t_a, 40000, LIN), (t_a + 3000, 260000, EASE)])
+    sun, sunb = s.mesh({"type": "sphere", "radius": 700}, (0, -150, 9000),
+                       dict(base="#000000", rough=0.5, emissive="#ffb35c", estrength=1.0), name="Sun", shadows=False)
+    s.anim(sunb, "emissiveStrength", [(0, 1.0, LIN), (t_a, 1.0, LIN), (t_a + 3000, 4.0, EASE)])
+    s.anim(sun, "position", [(0, (0, 250, 9000), LIN), (s.dur, (0, -350, 9000), LIN)], "vector3")
+    warm = s.light("spot", pos=(0, -900, 7000), aim=(0, -300, 1200), power=60000, color=(1, 0.72, 0.45), coneAngle=40, coneFeather=0.6)
+    s.anim(warm, "power", [(0, 60000, LIN), (t_a, 60000, LIN), (t_a + 3000, 220000, EASE)])
     s.light("area", pos=(-2500, -2500, -2500), aim=(0, -400, 1200), power=60000, color=(0.6, 0.75, 1), areaSize=[1500, 1500])
     cam = s.camera((0, -160, -3600), (0, -520, 1200), focal=32)
     s.path(cam, [(0, -160, -3600), (0, -240, -2900)], 0, s.dur, SMOOTH)
     t_end = s.at("s6b", -0.4)
     s.fade(900, 700, extra=[(t_end, 0, LIN), (t_end + 900, -2.6, EASE)])
     a, _ = win("s6a", 0.2, 0)
-    centered("用旅遊，搭起世界和平的橋樑", 300, a, LINES["s6b"]["start"] - 0.3, size=72, font=FONT_SERIF or FONT,
+    centered("用旅遊，搭起世界和平的橋樑", 80, a, LINES["s6b"]["start"] - 0.3, size=72, font=FONT_SERIF or FONT,
              color="#fff3e0", stroke=("#0a1420", 2))
     e0 = LINES["s6b"]["start"] - 0.1
     e1 = TOTAL - 0.15
