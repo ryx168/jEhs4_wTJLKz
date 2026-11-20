@@ -133,14 +133,14 @@ variants = [("v01_smoke", v01), ("v02_world", v02), ("v03_physcam", v03), ("v04_
             ("v06_point", v06), ("v07_floor", v07), ("v08_metal", v08), ("v09_emissive0", v09), ("v10_text3d", v10),
             ("v11_text3d_nobevel", v11), ("v12_fade", v12), ("v14_shadows", v14), ("v16_grid", v16), ("v17_bevelmod", v17)]
 only = os.environ.get("ONLY")
-for name, fn in (variants if os.environ.get("MODE") != "scenes" else []):
+for name, fn in (variants if os.environ.get("MODE") in (None, "", "ingredients") else []):
     if only and only not in name:
         continue
     try:
         variant(name, fn)
     except Exception as e:
         print(f"{name}: EXC {e}")
-if os.environ.get("MODE") != "scenes":
+if os.environ.get("MODE") in (None, "", "ingredients"):
     variant("v18_overlay2d", v01, overlays=True)
     variant("v19_nofont_smoke", v01, font=False)
     variant("v20_smoke_filmstrip", v01, mode="filmstrip")
@@ -220,4 +220,74 @@ if os.environ.get("MODE") == "scenes":
         if r:
             doc, built = r
             render_checks("all_scenes_ov", doc, built[3].t0, built[3].dur)
+    sys.exit(0)
+
+
+# ----------------------------------------------------------------- prefix / leave-one-out mode
+def doc_with(name, acts, total_s):
+    doc = OUT / f"{name}.tsrct"
+    if doc.exists():
+        doc.unlink()
+    tsrct("project", "create", "--project", doc)
+    tsrct("project", "import-font", "--project", doc, "--file", os.environ.get("FONT_BOLD", "/usr/share/fonts/opentype/noto/NotoSansCJK-Bold.ttc"))
+    ed = OUT / f"{name}.editable.json"
+    tsrct("project", "checkout", "--project", doc, "--output", ed)
+    d = json.load(open(ed, encoding="utf-8"))
+    B.set_key(d, "dimensions", {"width": 1920, "height": 1080}, [0])
+    d["duration"] = total_s
+    json.dump(d, open(ed, "w", encoding="utf-8"))
+    rc, out = tsrct("project", "commit", "--project", doc, "--file", ed)
+    if rc:
+        return None, "COMMIT " + out[-200:]
+    p = OUT / f"{name}.json"
+    json.dump(acts, open(p, "w", encoding="utf-8"), ensure_ascii=False)
+    rc, out = tsrct("project", "apply", "--project", doc, "--actions", p)
+    if rc:
+        return None, "APPLY " + out.strip().splitlines()[-1][:200]
+    return doc, ""
+
+def label(a):
+    t = a["type"]
+    if t in ("addFxScene3DLayer", "updateFxScene3DLayer"):
+        it = a["item"]
+        return f"{t} {it['type']} {it.get('name')} " + (json.dumps(it.get("emitter"))[:90] if it["type"] == "Light3D" else json.dumps(it.get("lens", ""))[:90])
+    if t == "addFxScene3DFragment":
+        return f"{t} " + ",".join(f"{i['type']}:{i.get('name')}" for i in a["items"]) + " " + ",".join(json.dumps(d.get('geometry', d.get('text', '')))[:60] for d in a["data"])
+    if t in ("setFxAnimator", "setFxPropertyValue"):
+        return f"{t} item={a['target']['itemId']} {a['target']['propertyName']}"
+    return t
+
+def try_render(doc, t_s):
+    rc, out = tsrct("preview", "--project", doc, "--time", t_s, "--samples", 1, "--output", str(doc) + ".png")
+    return rc == 0, ("" if rc == 0 else out.strip().splitlines()[-1][:120])
+
+if os.environ.get("MODE") == "prefix":
+    which = os.environ.get("ONLY") or "S1"
+    fn = getattr(B, f"scene_{which}")
+    s = fn()
+    acts = s.acts
+    t = (s.t0 + 2000) / 1000
+    total = B.TOTAL
+    print(f"== {which}: {len(acts)} actions, render at {t}s", flush=True)
+    for i, a in enumerate(acts):
+        print(f"  [{i:02d}] {label(a)}", flush=True)
+    print("== prefixes", flush=True)
+    first_fail = None
+    for k in range(1, len(acts) + 1):
+        doc, err = doc_with(f"{which}_p{k:02d}", acts[:k], total)
+        if doc is None:
+            print(f"  prefix {k:02d}: {err}", flush=True); continue
+        ok, msg = try_render(doc, t)
+        print(f"  prefix {k:02d} (+[{k-1:02d}] {label(acts[k-1])[:70]}): {'PASS' if ok else 'FAIL ' + msg}", flush=True)
+        if not ok and first_fail is None:
+            first_fail = k - 1
+    print("== leave-one-out", flush=True)
+    for i in range(1, len(acts)):
+        sub = acts[:i] + acts[i+1:]
+        doc, err = doc_with(f"{which}_lo{i:02d}", sub, total)
+        if doc is None:
+            print(f"  without [{i:02d}]: {err}", flush=True); continue
+        ok, msg = try_render(doc, t)
+        print(f"  without [{i:02d}] {label(acts[i])[:70]}: {'PASS' if ok else 'FAIL'}", flush=True)
+    print("first failing action index:", first_fail, flush=True)
     sys.exit(0)

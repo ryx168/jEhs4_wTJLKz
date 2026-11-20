@@ -6,7 +6,7 @@ on:
         description: run only variants whose name contains this
         default: ""
       mode:
-        description: ingredients | scenes
+        description: ingredients | scenes | prefix
         default: scenes
 permissions:
   contents: write
