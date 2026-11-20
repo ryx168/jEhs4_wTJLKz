@@ -326,7 +326,7 @@ def scene_S4():
            modifiers=[{"type": "bevel", "width": 6, "segments": 2, "profile": 0.5, "limitAngle": 30}])
     s.mesh({"type": "box", "size": [420, 24, 420]}, (0, -12, 0), dict(base="#b8bcc4", rough=0.18, metal=1.0), name="Die")
     pins, _ = s.group((0, 0, 0), array={"type": "grid", "counts": [14, 1, 14], "spacing": [60, 0, 60]}, name="Pins")
-    s.mesh({"type": "box", "size": [22, 10, 22]}, (-6.5 * 60, -29, -6.5 * 60), dict(base="#d4a94a", rough=0.3, metal=1.0),
+    s.mesh({"type": "box", "size": [22, 8, 22]}, (-6.5 * 60, -3, -6.5 * 60), dict(base="#d4a94a", rough=0.3, metal=1.0),
            parent=pins, name="Pin", shadows=False)
     lanes = []
     for i, x in enumerate((-300, -100, 100, 300)):
@@ -337,7 +337,7 @@ def scene_S4():
     for b in lanes:
         s.anim(b, "emissiveStrength", [(t_cut, 0, LIN), (t_cut + 400, 7, EASE_OUT), (s.at("s4d", 0.5), 7, LIN), (s.at("s4d", 1.3), 1.2, EASE)])
     s.light("area", pos=(-1800, -1600, -1200), aim=(0, 0, 0), power=70000, color=(0.7, 0.82, 1), areaSize=[700, 700])
-    s.light("spot", pos=(1600, -900, 1500), aim=(0, 0, 0), power=35000, color=(1, 0.8, 0.6), coneAngle=45, coneFeather=0.5)
+    s.light("spot", pos=(1600, -900, 1500), aim=(0, 0, 0), power=12000, color=(1, 0.8, 0.6), coneAngle=45, coneFeather=0.5)
     cam = s.camera((-1300, -800, -1500), (0, -10, 0), focal=50, fnum=4)
     keys, n = [], 7
     for k in range(n):
@@ -390,19 +390,23 @@ def scene_S6():
         _, sb = s.mesh({"type": "box", "size": [392, 850, 4]}, (pos[0], pos[1], pos[2] - 13),
                        dict(base="#000000", rough=0.2, emissive="#1d3b8a", estrength=screen_strength), parent=parent, name="Screen", shadows=False)
         return sb
-    phone(None, (0, 0, 0), 2.0)
-    tile, _ = s.mesh({"type": "box", "size": [150, 150, 8]}, (0, 330, -18), dict(base="#ffffff", rough=0.4, emissive="#e8f0ff", estrength=2.5),
+    phone(None, (0, 0, 0), 1.2)
+    icons, _ = s.group((0, 0, 0), array={"type": "grid", "counts": [4, 6, 1], "spacing": [82, 96, 0]}, name="Icons")
+    s.mesh({"type": "box", "size": [58, 58, 4]}, (-123, -220, -17), dict(base="#202634", rough=0.4, emissive="#8fa6d9", estrength=0.9),
+           parent=icons, name="Icon", shadows=False,
+           modifiers=[{"type": "bevel", "width": 12, "segments": 3, "profile": 0.5, "limitAngle": 30}])
+    tile, _ = s.mesh({"type": "box", "size": [150, 150, 8]}, (0, 340, -24), dict(base="#ffffff", rough=0.4, emissive="#4d8bff", estrength=4.0),
                      name="App tile", shadows=False, modifiers=[{"type": "bevel", "width": 18, "segments": 3, "profile": 0.5, "limitAngle": 30}])
     tr = s.at("s6b", 0.8)
-    s.anim(tile, "position", [(tr, (0, 330, -18), LIN), (tr + 2600, (0, -250, -18), EASE)], "vector3")
+    s.anim(tile, "position", [(tr, (0, 340, -24), LIN), (tr + 2600, (0, -340, -24), EASE)], "vector3")
     ring, _ = s.group((0, 0, 0), array={"type": "radial", "count": 7, "radius": 1150, "startAngle": 0, "sweep": 360,
                                         "axis": "y", "orient": True, "includeEnd": False}, name="Ring")
     ring_sb = phone(ring, (0, 0, 1150), 0.0)
     t2 = s.at("s6b", 2.0)
     s.anim(ring_sb, "emissiveStrength", [(t2, 0, LIN), (t2 + 1500, 1.8, EASE_OUT)])
     s.light("area", pos=(0, -3000, -1200), aim=(0, 0, 0), power=120000, color=(0.85, 0.9, 1), areaSize=[1500, 1500])
-    cam = s.camera((-600, -2300, -2900), (0, 0, 0), focal=35, fnum=4)
-    s.anim(cam, "position", [(0, (-600, -2300, -2900), LIN), (s.dur, (500, -1500, -2300), LIN)], "vector3")
+    cam = s.camera((-700, -700, -2900), (0, -80, 0), focal=35, fnum=4)
+    s.anim(cam, "position", [(0, (-700, -700, -2900), LIN), (s.dur, (500, -450, -2000), LIN)], "vector3")
     s.fade(1000, 900)
     a, b = line_window("s6a", 0.3, 1.2)
     text2d("DeepSeek-R1  ·  2025.01.20", 120, 900, a, b, size=48)

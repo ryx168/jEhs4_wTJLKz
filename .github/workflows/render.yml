@@ -85,7 +85,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           mkdir -p previews
-          rm -f previews/*
+          find previews -maxdepth 1 -type f -delete
           cp project/Previews/*.png previews/ 2>/dev/null || true
           cp project/.tesseract-work/build.log previews/build.log
           cp project/.tesseract-work/checks.jsonl previews/checks.jsonl 2>/dev/null || true
