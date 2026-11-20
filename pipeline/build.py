@@ -124,7 +124,10 @@ class Scene:
         self.acts.append({"type": "addFxScene3DLayer", "compositionId": "main", "layerId": self.layer,
             "item": {"type": "Camera3D", "id": cid, "parentId": None, "name": "Camera", "isHidden": False,
                      "transform": tr,
-                     "lens": {"type": "physical", "focalLengthMm": focal, "sensorMm": [36, 24], "fNumber": fnum},
+                     # Angle lens with the field of view a 36 mm-wide sensor would give at this focal length.
+                     # The Physical lens + sampled world light renders NaN radiance in tsrct 0.6.0 (bisected).
+                     "lens": {"type": "angle", "projection": {"type": "perspective",
+                              "angleOfView": round(math.degrees(2 * math.atan(18 / focal)), 3)}},
                      "exposure": exposure}})
         self.acts.append({"type": "setFxScene3DActiveCamera", "compositionId": "main", "layerId": self.layer, "cameraItemId": cid})
         self.cam = cid

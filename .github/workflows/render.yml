@@ -59,17 +59,6 @@ jobs:
           total=$(python3 -c "import json;print(int(round(json.load(open('script/script_timed.json'))['total']*1000)))")
           echo "total_ms=$total" >> "$GITHUB_OUTPUT"
           ls -la project project/Previews
-      - name: Timing probe (per-frame cost of each renderer on this scene)
-        if: github.event_name == 'push'
-        run: |
-          set +e
-          p=project/.tesseract-work/probe.log
-          s4=$(python3 -c "import json;s=json.load(open('script/script_timed.json'))['scenes'];print(int([x for x in s if x['id']=='S4'][0]['start']*1000)+6000)")
-          probe() { echo; echo "\$ $*" | tee -a $p; /usr/bin/time -f "  wall %es" "$TS" export --project project/project.tsrct --start-ms $s4 "$@" --encoder-backend external-ffmpeg-command --ffmpeg-path "$FFMPEG" 2>&1 | grep -E "complete|wall|error|Error" | tee -a $p; }
-          probe --duration-ms 1000 --resolution 1080p --samples 4 --output project/.tesseract-work/probe-raster4.mp4
-          probe --duration-ms 200 --resolution 1080p --renderer path-tracer --samples 32 --no-denoise --output project/.tesseract-work/probe-pt32nd.mp4
-          probe --duration-ms 100 --resolution 1080p --renderer path-tracer --samples 32 --output project/.tesseract-work/probe-pt32.mp4
-          cat $p
       - name: Plan chunks
         id: plan
         run: |
@@ -99,7 +88,6 @@ jobs:
           rm -f previews/*
           cp project/Previews/*.png previews/ 2>/dev/null || true
           cp project/.tesseract-work/build.log previews/build.log
-          cp project/.tesseract-work/probe.log previews/probe.log 2>/dev/null || true
           cp project/.tesseract-work/checks.jsonl previews/checks.jsonl 2>/dev/null || true
           cp project/.tesseract-work/document.schema.json previews/document.schema.json 2>/dev/null || true
           cp script/script_timed.json previews/script_timed.json
