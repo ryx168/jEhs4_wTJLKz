@@ -291,3 +291,39 @@ if os.environ.get("MODE") == "prefix":
         print(f"  without [{i:02d}] {label(acts[i])[:70]}: {'PASS' if ok else 'FAIL'}", flush=True)
     print("first failing action index:", first_fail, flush=True)
     sys.exit(0)
+
+
+# ----------------------------------------------------------------- world-fix mode
+if os.environ.get("MODE") == "worldfix":
+    import copy
+    def variants_for(acts):
+        out = {}
+        out["as_built"] = acts
+        def edit(fn):
+            a2 = copy.deepcopy(acts)
+            res = []
+            for a in a2:
+                if a["type"] == "setFxScene3DWorld":
+                    a = fn(a)
+                    if a is None:
+                        continue
+                res.append(a)
+            return res
+        out["bg_only"] = edit(lambda a: (a["world"].pop("light", None), a)[1])
+        out["prefiltered"] = edit(lambda a: (a["world"]["light"].__setitem__("integration", "prefiltered"), a)[1])
+        out["no_world"] = edit(lambda a: None)
+        return out
+    for which in (os.environ.get("ONLY") or "S1,S3,S6").split(","):
+        s = getattr(B, f"scene_{which}")()
+        lens = [a["item"].get("lens") for a in s.acts if a["type"] == "addFxScene3DLayer" and a["item"]["type"] == "Camera3D"]
+        print(f"== {which} lens={json.dumps(lens)}", flush=True)
+        for vname, acts in variants_for(s.acts).items():
+            doc, err = doc_with(f"wf_{which}_{vname}", acts, B.TOTAL)
+            if doc is None:
+                print(f"  {which} {vname}: {err}", flush=True); continue
+            for tl, t in (("t0", s.t0 / 1000), ("mid", (s.t0 + s.dur // 2) / 1000)):
+                ok, msg = try_render(doc, t)
+                print(f"  {which} {vname} {tl}: {'PASS' if ok else 'FAIL ' + msg[:60]}", flush=True)
+                if ok:
+                    shutil.copy(str(doc) + ".png", OUT / f"wf_{which}_{vname}_{tl}.png")
+    sys.exit(0)
