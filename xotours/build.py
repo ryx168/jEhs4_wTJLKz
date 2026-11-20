@@ -344,11 +344,12 @@ def scene_S2():
     s.anim(coin, "rotationY", [(0, -30, LIN), (s.dur, 330, LIN)])
     t_kind = s.at("s2b", 0.2)
     s.anim(coinb, "emissiveStrength", [(0, 0, LIN), (t_kind, 0, LIN), (t_kind + 2500, 2.5, EASE_OUT)])
-    s.text3d("1994", (0, -170, 2600), size=520, depth=80, mat=dict(base=TEAL, rough=0.35, metal=0.6),
-             side_mat=dict(base="#1d4a52", rough=0.4, metal=0.6), bevel=6, name="1994", font=FONT_SERIF or FONT)
+    s.text3d("1994", (0, -170, 2600), size=520, depth=80, mat=dict(base="#2a5d66", rough=0.5, metal=0.3),
+             side_mat=dict(base="#173a40", rough=0.5, metal=0.3), bevel=6, name="1994", font=FONT_SERIF or FONT)
     key = s.light("spot", pos=(300, -1600, -500), aim=(0, -70, 0), power=7000, color=(1, 0.82, 0.6), coneAngle=26, coneFeather=0.7)
     s.anim(key, "power", [(0, 7000, LIN), (t_kind, 7000, LIN), (t_kind + 2500, 15000, EASE)])
-    s.light("spot", pos=(-1800, -1400, 600), aim=(0, -300, 2600), power=40000, color=(0.55, 0.8, 1), coneAngle=30, coneFeather=0.6)
+    s.light("area", pos=(-200, -350, -900), aim=(0, -70, 0), power=2500, color=(1, 0.9, 0.75), areaSize=[400, 300], shadows=False)
+    s.light("spot", pos=(-1800, -1400, 600), aim=(0, -300, 2600), power=9000, color=(0.55, 0.8, 1), coneAngle=30, coneFeather=0.6)
     cam = s.camera((-160, -95, -520), (0, -110, 0), focal=50)
     s.path(cam, [(-160, -95, -520), (-40, -160, -1300), (100, -230, -2200)], 0, s.dur, SMOOTH)
     s.fade(900, 700)
@@ -362,7 +363,7 @@ def scene_S3():
     """新聯華 = 心中有蓮花: a lotus opens on dark water and lights from within."""
     s = Scene("S3", 12, 3000)
     s.world("#03080c", 0.03, (0.6, 0.85, 1))
-    s.mesh({"type": "box", "size": [40000, 20, 40000]}, (0, 12, 0), dict(base="#04141a", rough=0.06), name="Water")
+    s.mesh({"type": "box", "size": [40000, 20, 40000]}, (0, 12, 0), dict(base="#04141a", rough=0.14), name="Water")
     for x, z, r in ((-700, 300, 260), (650, 500, 220), (-300, 1200, 300), (900, -350, 180)):
         s.mesh({"type": "cylinder", "radius": r, "height": 6}, (x, -1, z), dict(base="#2f6b4a", rough=0.55), name="Pad")
     t_open = s.at("s3a", 0.0)
@@ -455,7 +456,7 @@ def scene_S4():
         ta = t_abs0 + l0["dur"] * frac
         text2d("→ " + name, 120, 210 + k * 62, ta, sc_end("S4"), size=40, color="#bff7ff", font=FONT_REG)
     a, b = win("s4b", 0.2, 1.0)
-    centered("百餘家同業旅行社的機票調度中心", 930, a, b, size=48, color="#ffffff")
+    centered("百餘家同業旅行社的機票調度中心", 930, a, b, size=48, color="#ffffff", stroke=("#0a1420", 4))
     return s
 
 def scene_S5():
@@ -502,7 +503,7 @@ def scene_S6():
     sun, sunb = s.mesh({"type": "sphere", "radius": 700}, (0, -150, 9000),
                        dict(base="#000000", rough=0.5, emissive="#ffb35c", estrength=1.0), name="Sun", shadows=False)
     s.anim(sunb, "emissiveStrength", [(0, 1.0, LIN), (t_a, 1.0, LIN), (t_a + 3000, 4.0, EASE)])
-    s.anim(sun, "position", [(0, (0, 250, 9000), LIN), (s.dur, (0, -350, 9000), LIN)], "vector3")
+    s.anim(sun, "position", [(0, (0, 250, 9000), LIN), (s.at("s6b", -0.4), (0, -120, 9000), EASE_OUT)], "vector3")
     warm = s.light("spot", pos=(0, -900, 7000), aim=(0, -300, 1200), power=60000, color=(1, 0.72, 0.45), coneAngle=40, coneFeather=0.6)
     s.anim(warm, "power", [(0, 60000, LIN), (t_a, 60000, LIN), (t_a + 3000, 220000, EASE)])
     s.light("area", pos=(-2500, -2500, -2500), aim=(0, -400, 1200), power=60000, color=(0.6, 0.75, 1), areaSize=[1500, 1500])
@@ -516,9 +517,9 @@ def scene_S6():
     e0 = LINES["s6b"]["start"] - 0.1
     e1 = TOTAL - 0.15
     image2d("logo", 960, 360, 344, 356, e0, e1, scale=78)
-    centered("新聯華假期   XO TOURS", 560, e0 + 0.3, e1, size=72, font=FONT_SERIF or FONT, color="#f6dc9a", tracking=40)
-    centered("1994 – 2026  ·  32 週年", 668, e0 + 0.6, e1, size=38, color="#d8e6ea", tracking=60)
-    centered("xotours.net   ·   1.800.978.1788", 760, e0 + 0.9, e1, size=46, color="#ffffff", tracking=30)
+    centered("新聯華假期   XO TOURS", 560, e0 + 0.3, e1, size=72, font=FONT_SERIF or FONT, color="#f6dc9a", tracking=40, stroke=("#0a1420", 4))
+    centered("1994 – 2026  ·  32 週年", 668, e0 + 0.6, e1, size=38, color="#d8e6ea", tracking=60, stroke=("#0a1420", 3))
+    centered("xotours.net   ·   1.800.978.1788", 760, e0 + 0.9, e1, size=46, color="#ffffff", tracking=30, stroke=("#0a1420", 4))
     return s
 
 # ----------------------------------------------------------------- document
