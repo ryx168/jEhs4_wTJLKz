@@ -112,7 +112,7 @@ class Scene:
     def world(self, bg="#020203", ambient=0.03, ambient_color=(1, 1, 1), fog=None):
         w = {"id": self.world_id, "background": {"type": "color", "color": srgb(bg, 1)},
              "light": {"source": {"type": "color", "color": list(ambient_color) + [1]},
-                       "intensity": ambient, "integration": "sampled"}}
+                       "intensity": ambient, "integration": "prefiltered"}}  # "sampled" renders NaN radiance in tsrct 0.6.0 (bisected)
         if fog:
             w["fog"] = {"color": fog[0], "startDistance": fog[1], "endDistance": fog[2]}
         self.acts.append({"type": "setFxScene3DWorld", "compositionId": "main", "layerId": self.layer, "world": w})
