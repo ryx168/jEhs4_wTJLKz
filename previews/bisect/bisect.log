@@ -1,33 +1,27 @@
-== S1: 10 actions, render at 2.0s
-  [00] createFxScene3DLayer
-  [01] setFxScene3DWorld
-  [02] addFxScene3DFragment Mesh3D:Floor {"type": "box", "size": [30000, 40, 30000]}
-  [03] addFxScene3DFragment Text3D:Number "-589,000,000,000"
-  [04] addFxScene3DLayer Light3D area light {"type": "area", "power": 90000, "shape": {"type": "rectangle", "areaSize": [900, 600]}}
-  [05] addFxScene3DLayer Light3D spot light {"type": "spot", "power": 60000, "coneAngle": 40, "coneFeather": 0.4}
-  [06] addFxScene3DLayer Camera3D Camera {"type": "physical", "focalLengthMm": 50, "sensorMm": [36, 24], "fNumber": 5.6}
-  [07] setFxScene3DActiveCamera
-  [08] setFxAnimator item=1020 position
-  [09] setFxAnimator item=1001 exposure
-== prefixes
-  prefix 01 (+[00] createFxScene3DLayer): PASS
-  prefix 02 (+[01] setFxScene3DWorld): PASS
-  prefix 03 (+[02] addFxScene3DFragment Mesh3D:Floor {"type": "box", "size": [30000, 40, ): PASS
-  prefix 04 (+[03] addFxScene3DFragment Text3D:Number "-589,000,000,000"): PASS
-  prefix 05 (+[04] addFxScene3DLayer Light3D area light {"type": "area", "power": 90000, ): PASS
-  prefix 06 (+[05] addFxScene3DLayer Light3D spot light {"type": "spot", "power": 60000, ): PASS
-  prefix 07 (+[06] addFxScene3DLayer Camera3D Camera {"type": "physical", "focalLengthMm"): PASS
-  prefix 08 (+[07] setFxScene3DActiveCamera): FAIL Error: Render failed: Invalid radiance in frame 1: numeric flags 0x1 (bits: input=1, add=2, mul=4, domain=8, div=16; oth
-  prefix 09 (+[08] setFxAnimator item=1020 position): FAIL Error: Render failed: Invalid radiance in frame 1: numeric flags 0x1 (bits: input=1, add=2, mul=4, domain=8, div=16; oth
-  prefix 10 (+[09] setFxAnimator item=1001 exposure): FAIL Error: Render failed: Invalid radiance in frame 1: numeric flags 0x1 (bits: input=1, add=2, mul=4, domain=8, div=16; oth
-== leave-one-out
-  without [01] setFxScene3DWorld: PASS
-  without [02] addFxScene3DFragment Mesh3D:Floor {"type": "box", "size": [30000, 40, : FAIL
-  without [03] addFxScene3DFragment Text3D:Number "-589,000,000,000": FAIL
-  without [04] addFxScene3DLayer Light3D area light {"type": "area", "power": 90000, : FAIL
-  without [05] addFxScene3DLayer Light3D spot light {"type": "spot", "power": 60000, : FAIL
-  without [06]: APPLY {"diagnostics":[{"code":"invalid_document","message":"apply entry 6 (\"setFxScene3DActiveCamera\"): project action batch was rejected: batch action 6 failed: Scene3D edit rejected: Scene3D 10 activeCa
-  without [07] setFxScene3DActiveCamera: PASS
-  without [08] setFxAnimator item=1020 position: FAIL
-  without [09] setFxAnimator item=1001 exposure: FAIL
-first failing action index: 7
+== S1 lens=[{"type": "angle", "projection": {"type": "perspective", "angleOfView": 39.598}}]
+  S1 as_built t0: FAIL Error: Render failed: Invalid radiance in frame 1: numeric f
+  S1 as_built mid: FAIL Error: Render failed: Invalid radiance in frame 1: numeric f
+  S1 bg_only t0: PASS
+  S1 bg_only mid: PASS
+  S1 prefiltered t0: PASS
+  S1 prefiltered mid: PASS
+  S1 no_world t0: PASS
+  S1 no_world mid: PASS
+== S3 lens=[{"type": "angle", "projection": {"type": "perspective", "angleOfView": 54.432}}]
+  S3 as_built t0: FAIL Error: Render failed: Invalid radiance in frame 1: numeric f
+  S3 as_built mid: FAIL Error: Render failed: Invalid radiance in frame 1: numeric f
+  S3 bg_only t0: PASS
+  S3 bg_only mid: PASS
+  S3 prefiltered t0: PASS
+  S3 prefiltered mid: PASS
+  S3 no_world t0: PASS
+  S3 no_world mid: PASS
+== S6 lens=[{"type": "angle", "projection": {"type": "perspective", "angleOfView": 54.432}}]
+  S6 as_built t0: FAIL Error: Render failed: Invalid radiance in frame 1: numeric f
+  S6 as_built mid: FAIL Error: Render failed: Invalid radiance in frame 1: numeric f
+  S6 bg_only t0: PASS
+  S6 bg_only mid: PASS
+  S6 prefiltered t0: PASS
+  S6 prefiltered mid: PASS
+  S6 no_world t0: PASS
+  S6 no_world mid: PASS
