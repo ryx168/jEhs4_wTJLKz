@@ -274,7 +274,7 @@ def text2d(text, x, y, t_start, t_end, size=44, color="#ffffff", align="left", b
     st = {"text": text, "fontFamily": f["family"], "fontStyle": f["style"], "fontSize": size,
           "fillColor": srgb(color, 1), "justification": align, "strokeWidth": 0, "tracking": tracking}
     if stroke:
-        st.update({"strokeWidth": stroke[1], "strokeColor": srgb(stroke[0], 1)})
+        st.update({"strokeEnabled": True, "strokeWidth": stroke[1], "strokeColor": srgb(stroke[0], 1)})
     if box_w:
         st.update({"boxText": True, "boxPosition": [0, 0], "boxSize": [box_w, int(size * 1.7)]})
     s, e = int(t_start * 1000), int(t_end * 1000)
@@ -349,7 +349,7 @@ def scene_S2():
     key = s.light("spot", pos=(300, -1600, -500), aim=(0, -70, 0), power=7000, color=(1, 0.82, 0.6), coneAngle=26, coneFeather=0.7)
     s.anim(key, "power", [(0, 7000, LIN), (t_kind, 7000, LIN), (t_kind + 2500, 15000, EASE)])
     s.light("area", pos=(-200, -350, -900), aim=(0, -70, 0), power=2500, color=(1, 0.9, 0.75), areaSize=[400, 300], shadows=False)
-    s.light("spot", pos=(-1800, -1400, 600), aim=(0, -300, 2600), power=9000, color=(0.55, 0.8, 1), coneAngle=30, coneFeather=0.6)
+    s.light("spot", pos=(-1800, -1400, 600), aim=(0, -300, 2600), power=900, color=(0.55, 0.8, 1), coneAngle=30, coneFeather=0.6)
     cam = s.camera((-160, -95, -520), (0, -110, 0), focal=50)
     s.path(cam, [(-160, -95, -520), (-40, -160, -1300), (100, -230, -2200)], 0, s.dur, SMOOTH)
     s.fade(900, 700)
