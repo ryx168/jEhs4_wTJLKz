@@ -1,0 +1,180 @@
+name: xotours-ad
+# XO Tours (新聯華假期) "about us" ad. Separate from render.yml (the DeepSeek film) on purpose:
+# its own concurrency group, its own paths, so neither cancels the other.
+# push   -> narration + build + one raster filmstrip per scene, committed to xotours/previews/
+# manual -> same build, chunked export, stitched with narration + music bed, published as a Release
+on:
+  workflow_dispatch:
+    inputs:
+      renderer:
+        description: raster | path-tracer
+        default: raster
+      samples:
+        description: samples per pixel
+        default: "8"
+      denoise:
+        description: path-tracer denoiser (slow on CPU) yes | no
+        default: "no"
+      chunks:
+        description: parallel export chunks
+        default: "20"
+      resolution:
+        description: 720p | 1080p | 4k
+        default: 1080p
+      fps:
+        default: "30"
+  push:
+    paths:
+      - "xotours/**"
+      - "!xotours/previews/**"
+      - ".github/workflows/xotours.yml"
+permissions:
+  contents: write
+concurrency:
+  group: xotours-${{ github.ref }}-${{ github.event_name }}
+  cancel-in-progress: true
+env:
+  TSRCT_VERSION: "0.6.0"
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    outputs:
+      total_ms: ${{ steps.build.outputs.total_ms }}
+      chunks: ${{ steps.plan.outputs.chunks }}
+      matrix: ${{ steps.plan.outputs.matrix }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Tesseract CLI
+        run: bash pipeline/install-tsrct.sh
+      - name: Narration (edge-tts placeholder unless real recordings are present) + music bed
+        run: |
+          pip install -q edge-tts numpy
+          python3 xotours/tts.py
+          python3 xotours/make_bgm.py
+      - name: Build the project
+        id: build
+        run: |
+          set -o pipefail
+          export TESSERACT_SKILL=tesseract-3d
+          mkdir -p xotours/project/.tesseract-work
+          python3 xotours/build.py 2>&1 | tee xotours/project/.tesseract-work/build.log
+          total=$(python3 -c "import json;print(int(round(json.load(open('xotours/script_timed.json'))['total']*1000)))")
+          echo "total_ms=$total" >> "$GITHUB_OUTPUT"
+      - name: Plan chunks
+        id: plan
+        if: always()
+        run: |
+          n="${{ github.event.inputs.chunks || '20' }}"
+          echo "chunks=$n" >> "$GITHUB_OUTPUT"
+          echo "matrix=$(python3 -c "import json;print(json.dumps(list(range(int('$n')))))")" >> "$GITHUB_OUTPUT"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: xo-project
+          path: |
+            xotours/project/project.tsrct
+            xotours/project/narration/narration.wav
+            xotours/project/bgm.wav
+            xotours/project/Previews
+            xotours/project/.tesseract-work/*.log
+            xotours/project/.tesseract-work/checks.jsonl
+            xotours/project/.tesseract-work/batches
+            xotours/script_timed.json
+          retention-days: 14
+      - name: Commit previews + logs back
+        if: always() && github.event_name == 'push'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          mkdir -p xotours/previews
+          find xotours/previews -maxdepth 1 -type f -delete
+          cp xotours/project/Previews/*.png xotours/previews/ 2>/dev/null || true
+          cp xotours/project/.tesseract-work/build.log xotours/previews/build.log 2>/dev/null || true
+          cp xotours/project/.tesseract-work/checks.jsonl xotours/previews/checks.jsonl 2>/dev/null || true
+          cp xotours/script_timed.json xotours/previews/script_timed.json 2>/dev/null || true
+          git add xotours/previews
+          git commit -m "xotours previews: run ${{ github.run_number }} [skip ci]" || echo "nothing to commit"
+          for i in 1 2 3; do git pull --rebase -q && git push && break; sleep 5; done
+
+  render:
+    if: github.event_name == 'workflow_dispatch'
+    needs: build
+    runs-on: ubuntu-24.04
+    timeout-minutes: 355
+    strategy:
+      fail-fast: false
+      max-parallel: 20
+      matrix:
+        chunk: ${{ fromJson(needs.build.outputs.matrix) }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Tesseract CLI
+        run: bash pipeline/install-tsrct.sh
+      - uses: actions/download-artifact@v4
+        with:
+          name: xo-project
+          path: in
+      - name: Export chunk ${{ matrix.chunk }}
+        run: |
+          total=${{ needs.build.outputs.total_ms }}
+          n=${{ needs.build.outputs.chunks }}
+          fps=${{ github.event.inputs.fps || '30' }}
+          c=${{ matrix.chunk }}
+          frames=$(( total * fps / 1000 ))
+          f0=$(( frames * c / n ))
+          f1=$(( frames * (c + 1) / n ))
+          [ $c -eq $((n - 1)) ] && f1=$frames
+          echo "chunk $c: frames $f0..$f1 of $frames"
+          mkdir -p out
+          proj=$(find in -name project.tsrct | head -1)
+          args=(--project "$proj" --start-frame $f0 --frame-count $((f1 - f0)) --fps $fps
+                --resolution ${{ github.event.inputs.resolution || '1080p' }}
+                --samples ${{ github.event.inputs.samples || '8' }}
+                --encoder-backend external-ffmpeg-command --ffmpeg-path "$FFMPEG" --json
+                --output out/chunk-$(printf '%03d' $c).mp4)
+          if [ "${{ github.event.inputs.renderer || 'raster' }}" = "path-tracer" ]; then
+            args+=(--renderer path-tracer)
+            [ "${{ github.event.inputs.denoise || 'no' }}" = "yes" ] || args+=(--no-denoise)
+          fi
+          export TESSERACT_SKILL=tesseract-3d
+          "$TS" export "${args[@]}" 2> out/export-$c.log
+          tail -2 out/export-$c.log
+          ffprobe -v error -show_entries format=duration -of csv=p=0 out/chunk-*.mp4
+      - uses: actions/upload-artifact@v4
+        with:
+          name: xo-chunk-${{ matrix.chunk }}
+          path: out
+          retention-days: 7
+
+  stitch:
+    if: github.event_name == 'workflow_dispatch'
+    needs: [build, render]
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          path: in
+      - name: Concat + narration + music bed
+        run: |
+          sudo apt-get install -y -qq ffmpeg >/dev/null
+          ls in/xo-chunk-*/chunk-*.mp4 | sort > list.txt
+          sed "s/^/file '/;s/$/'/" list.txt > concat.txt
+          ffmpeg -v error -f concat -safe 0 -i concat.txt -c copy video.mp4
+          nar=$(find in/xo-project -name narration.wav | head -1)
+          bgm=$(find in/xo-project -name bgm.wav | head -1)
+          ffmpeg -v error -i video.mp4 -i "$nar" -i "$bgm" -filter_complex \
+            "[2:a]volume=0.22[b];[b][1:a]sidechaincompress=threshold=0.04:ratio=6:attack=20:release=400[d];[1:a][d]amix=inputs=2:normalize=0,loudnorm=I=-16:TP=-1.5:LRA=11,aresample=48000[a]" \
+            -map 0:v -map "[a]" -c:v copy -c:a aac -b:a 192k -ac 2 -shortest xotours_about_us.mp4
+          ffprobe -v error -show_entries format=duration:stream=codec_name,width,height,r_frame_rate -of compact xotours_about_us.mp4
+          nb=$(ffprobe -v error -count_frames -select_streams v -show_entries stream=nb_read_frames -of csv=p=0 xotours_about_us.mp4)
+          ffmpeg -v error -i xotours_about_us.mp4 -vf "select='not(mod(n\,$(( nb / 24 + 1 ))))',scale=480:-1,tile=4x6" -frames:v 1 contact_sheet.png
+      - name: Release
+        run: |
+          tag="xotours-run-${{ github.run_number }}"
+          gh release create "$tag" xotours_about_us.mp4 contact_sheet.png \
+            -t "新聯華假期 XO Tours · 關於我們 — ${{ github.event.inputs.renderer }} ${{ github.event.inputs.resolution }} (run ${{ github.run_number }})" \
+            -n "renderer=${{ github.event.inputs.renderer }} samples=${{ github.event.inputs.samples }} denoise=${{ github.event.inputs.denoise }} chunks=${{ github.event.inputs.chunks }} fps=${{ github.event.inputs.fps }}"
+        env:
+          GH_TOKEN: ${{ github.token }}
