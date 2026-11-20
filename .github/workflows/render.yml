@@ -21,6 +21,12 @@ on:
         default: 1080p
       fps:
         default: "30"
+      only_chunks:
+        description: comma list of chunk numbers to (re)render, empty = all
+        default: ""
+      reuse_run:
+        description: run id whose chunk artifacts fill in the chunks not rendered here
+        default: ""
   push:
     paths:
       - "pipeline/**"
@@ -64,7 +70,8 @@ jobs:
         run: |
           n="${{ github.event.inputs.chunks || '20' }}"
           echo "chunks=$n" >> "$GITHUB_OUTPUT"
-          echo "matrix=$(python3 -c "import json;print(json.dumps(list(range(int('$n')))))")" >> "$GITHUB_OUTPUT"
+          only="${{ github.event.inputs.only_chunks }}"
+          echo "matrix=$(python3 -c "import json;o='$only'.strip();print(json.dumps([int(x) for x in o.split(',')] if o else list(range(int('$n')))))")" >> "$GITHUB_OUTPUT"
       - uses: actions/upload-artifact@v4
         with:
           name: project
@@ -137,10 +144,16 @@ jobs:
             [ "${{ github.event.inputs.denoise || 'no' }}" = "yes" ] || args+=(--no-denoise)
           fi
           export TESSERACT_SKILL=tesseract-3d
-          "$TS" export "${args[@]}" 2> out/export-$c.log
+          if ! "$TS" export "${args[@]}" 2> out/export-$c.log; then
+            echo "::error::export failed for chunk $c"
+            grep -vE '"(event|type)":"progress"' out/export-$c.log | tail -40
+            tail -3 out/export-$c.log
+            exit 1
+          fi
           tail -2 out/export-$c.log
           ffprobe -v error -show_entries format=duration -of csv=p=0 out/chunk-*.mp4
       - uses: actions/upload-artifact@v4
+        if: always()
         with:
           name: chunk-${{ matrix.chunk }}
           path: out
@@ -152,13 +165,22 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
+      - name: Chunks from an earlier run
+        if: github.event.inputs.reuse_run != ''
+        run: |
+          mkdir -p in
+          gh run download ${{ github.event.inputs.reuse_run }} -R ${{ github.repository }} -p 'chunk-*' -D in
+          ls in
+        env:
+          GH_TOKEN: ${{ github.token }}
       - uses: actions/download-artifact@v4
         with:
           path: in
       - name: Concat + mux narration
         run: |
           sudo apt-get install -y -qq ffmpeg >/dev/null
-          ls in/chunk-*/chunk-*.mp4 | sort > list.txt
+          n=${{ needs.build.outputs.chunks }}
+          for c in $(seq 0 $((n - 1))); do f=in/chunk-$c/chunk-$(printf '%03d' $c).mp4; [ -s "$f" ] || { echo "::error::missing $f"; exit 1; }; echo "$f"; done > list.txt
           sed "s/^/file '/;s/$/'/" list.txt > concat.txt
           cat concat.txt
           ffmpeg -v error -f concat -safe 0 -i concat.txt -c copy video.mp4
