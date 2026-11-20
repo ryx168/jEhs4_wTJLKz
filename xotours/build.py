@@ -499,13 +499,19 @@ def scene_S6():
     arch, archb = s.mesh({"type": "torus", "radius": 1300, "tubeRadius": 30}, (0, 0, 1200),
                          dict(GOLD, emissive="#ffcf70", estrength=0.0), rot=(90, 0, 0), name="Bridge")
     t_a = s.at("s6a", 0.0)
-    s.anim(archb, "emissiveStrength", [(0, 0, LIN), (t_a, 0, LIN), (t_a + 2600, 3.5, EASE_OUT)])
+    t_card = s.at("s6b", -0.4)
+    s.anim(archb, "emissiveStrength", [(0, 0, LIN), (t_a, 0, LIN), (t_a + 2600, 3.5, EASE_OUT),
+                                       (t_card, 3.5, LIN), (t_card + 1500, 0.8, EASE)])
     sun, sunb = s.mesh({"type": "sphere", "radius": 700}, (0, -150, 9000),
                        dict(base="#000000", rough=0.5, emissive="#ffb35c", estrength=1.0), name="Sun", shadows=False)
     s.anim(sunb, "emissiveStrength", [(0, 1.0, LIN), (t_a, 1.0, LIN), (t_a + 3000, 4.0, EASE)])
-    s.anim(sun, "position", [(0, (0, 250, 9000), LIN), (s.at("s6b", -0.4), (0, -120, 9000), EASE_OUT)], "vector3")
+    # rises behind the arch, then sets again under the end card so the text never sits on it
+    t_set = s.at("s6b", -0.4)
+    s.anim(sun, "position", [(0, (0, 250, 9000), LIN), (t_set, (0, -120, 9000), EASE_OUT),
+                             (t_set + 2200, (0, 900, 9000), EASE)], "vector3")
     warm = s.light("spot", pos=(0, -900, 7000), aim=(0, -300, 1200), power=60000, color=(1, 0.72, 0.45), coneAngle=40, coneFeather=0.6)
-    s.anim(warm, "power", [(0, 60000, LIN), (t_a, 60000, LIN), (t_a + 3000, 220000, EASE)])
+    s.anim(warm, "power", [(0, 60000, LIN), (t_a, 60000, LIN), (t_a + 3000, 220000, EASE),
+                           (t_card, 220000, LIN), (t_card + 2000, 40000, EASE)])
     s.light("area", pos=(-2500, -2500, -2500), aim=(0, -400, 1200), power=60000, color=(0.6, 0.75, 1), areaSize=[1500, 1500])
     cam = s.camera((0, -160, -3600), (0, -520, 1200), focal=32)
     s.path(cam, [(0, -160, -3600), (0, -240, -2900)], 0, s.dur, SMOOTH)
